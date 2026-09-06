@@ -1,0 +1,165 @@
+/* Staff portal visual overrides for Posture Clinic admin app */
+:root {
+  --bg: #e4ebf5 !important;
+  --soft: #e4ebf5 !important;
+  --panel: #e4ebf5 !important;
+  --line: transparent !important;
+  --brand-soft: #c7d9ff !important;
+  --neo-raised: 8px 8px 16px #c8d0e0, -8px -8px 16px #ffffff;
+  --neo-inset: inset 5px 5px 10px #c8d0e0, inset -5px -5px 10px #ffffff;
+}
+
+html, body { background: #e4ebf5 !important; }
+
+.sidebar {
+  background: #e4ebf5 !important;
+  color: var(--text) !important;
+  box-shadow: 8px 0 20px rgba(200, 208, 224, 0.45);
+  border-right: none !important;
+}
+.sidebar .brand {
+  border-bottom: none !important;
+  margin: 12px;
+  padding: 16px !important;
+  border-radius: 18px;
+  background: #e4ebf5;
+  box-shadow: var(--neo-raised);
+}
+.sidebar .brand h1 { color: var(--brand-dark) !important; }
+.sidebar .brand p { color: var(--muted) !important; opacity: 1 !important; }
+.nav a {
+  color: var(--text) !important;
+  margin: 0 10px 6px;
+  border-radius: 14px !important;
+  box-shadow: none;
+}
+.nav a:hover {
+  background: #e4ebf5 !important;
+  box-shadow: var(--neo-inset) !important;
+}
+.nav a.active {
+  background: linear-gradient(145deg, #3b82f6, #2563eb) !important;
+  color: #fff !important;
+  box-shadow: 6px 6px 14px rgba(37, 99, 235, 0.35), -4px -4px 10px rgba(255,255,255,0.7) !important;
+}
+.sb-foot {
+  border-top: none !important;
+  margin: 10px;
+  padding: 12px !important;
+  border-radius: 14px;
+  background: #e4ebf5;
+  box-shadow: var(--neo-inset);
+  color: var(--muted) !important;
+  opacity: 1 !important;
+}
+
+.topbar {
+  background: #e4ebf5 !important;
+  border-bottom: none !important;
+  box-shadow: 0 8px 18px rgba(200, 208, 224, 0.35);
+}
+.topbar .search input {
+  border: none !important;
+  background: #e4ebf5 !important;
+  box-shadow: var(--neo-inset) !important;
+}
+
+.stat, .panel, .profile-card, .month-card, .service-card, .painitem, .about-panel, .info-panel,
+.modal, .step, .cal-cell, .time-cell, .time-grid, .calendar-grid, .month-card {
+  background: #e4ebf5 !important;
+  border: none !important;
+  box-shadow: var(--neo-raised) !important;
+}
+
+.btn {
+  border: none !important;
+  background: #e4ebf5 !important;
+  box-shadow: var(--neo-raised) !important;
+}
+.btn:hover { filter: brightness(1.02); }
+.btn:active { box-shadow: var(--neo-inset) !important; }
+.btn.primary {
+  background: linear-gradient(145deg, #3b82f6, #2563eb) !important;
+  color: #fff !important;
+  box-shadow: 6px 6px 14px rgba(37, 99, 235, 0.35), -4px -4px 10px rgba(255,255,255,0.75) !important;
+}
+.btn.accent {
+  background: linear-gradient(145deg, #06b6d4, #0891b2) !important;
+  color: #fff !important;
+}
+.btn.danger { color: var(--danger) !important; }
+
+.field input, .field select, .field textarea,
+.contact-form input, .contact-form textarea,
+.date-combo button, .pill-tabs button, .modal-back {
+  border: none !important;
+  background: #e4ebf5 !important;
+  box-shadow: var(--neo-inset) !important;
+}
+.pill-tabs button.on {
+  background: linear-gradient(145deg, #3b82f6, #2563eb) !important;
+  color: #fff !important;
+  box-shadow: 6px 6px 14px rgba(37, 99, 235, 0.35) !important;
+}
+
+.scale button {
+  border: none !important;
+  background: #e4ebf5 !important;
+  box-shadow: var(--neo-raised) !important;
+}
+.scale button.on {
+  background: #fecaca !important;
+  box-shadow: var(--neo-inset) !important;
+}
+
+.modal-bg { background: rgba(30, 41, 59, 0.35) !important; backdrop-filter: blur(6px); }
+.modal-head, .modal-foot {
+  background: #e4ebf5 !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+.toast {
+  background: #1e293b !important;
+  box-shadow: var(--neo-raised) !important;
+}
+
+.cal-day-head, .time-head {
+  background: #e4ebf5 !important;
+  box-shadow: var(--neo-inset) !important;
+  border: none !important;
+}
+.appt-chip {
+  border: none !important;
+  box-shadow: var(--neo-inset) !important;
+}
+
+table th, table td { border-bottom: 1px solid rgba(200, 208, 224, 0.55) !important; }
+tbody tr:hover { background: rgba(255,255,255,0.25) !important; }
+
+.tag.green { box-shadow: var(--neo-inset) !important; }
+.tag.blue, .tag.amber { box-shadow: var(--neo-inset) !important; }
+
+.bodychart img {
+  border: none !important;
+  box-shadow: var(--neo-raised) !important;
+}
+
+.portal-logout {
+  position: fixed;
+  bottom: 18px;
+  left: 18px;
+  z-index: 60;
+  border: none;
+  background: #e4ebf5;
+  box-shadow: var(--neo-raised);
+  border-radius: 999px;
+  padding: 10px 16px;
+  font-weight: 700;
+  color: var(--brand-dark);
+  cursor: pointer;
+}
+
+@media print {
+  .portal-logout { display: none !important; }
+  .sidebar, .topbar { box-shadow: none !important; }
+}

@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="robots" content="noindex, nofollow" />
 <title>Posture Clinic — Dr. Ardeshir Ekhtiari</title>
 <style>
   :root{
@@ -243,9 +244,14 @@
 <link rel="stylesheet" href="portal-neumorph.css" />
 </head>
 <body>
-<script src="auth-config.js?v=1"></script>
-<script src="auth.js?v=1"></script>
-<script>PosturePortalAuth.requireAppAccess();</script>
+<script src="auth-config.js?v=2"></script>
+<script src="auth.js?v=2"></script>
+<script>
+document.documentElement.style.visibility = "hidden";
+PosturePortalAuth.requireAppAccess().then(function (allowed) {
+  if (allowed) document.documentElement.style.visibility = "";
+});
+</script>
 <div class="app">
   <aside class="sidebar">
     <div class="brand">
@@ -1326,14 +1332,6 @@ views.settings = function(){
         <label class="btn sm" style="margin-top:6px">&#128101; Upload Body Chart<input type="file" accept="image/png,image/jpeg,image/svg+xml" style="display:none" onchange="uploadClinicImage('bodyChart',this)"></label>
       </div>
     </div>
-    <div class="sec-title">Admin Password</div>
-    <p class="desc">Change the password used to sign in at <code>portal.html</code>. Stored locally in this browser only.</p>
-    <div class="grid three" style="align-items:end">
-      <div class="field"><label>Current Password</label><input id="admin_cur" type="password" autocomplete="current-password"/></div>
-      <div class="field"><label>New Password</label><input id="admin_new" type="password" autocomplete="new-password"/></div>
-      <div class="field"><label>Confirm New Password</label><input id="admin_confirm" type="password" autocomplete="new-password"/></div>
-    </div>
-    
     <div style="margin-top:12px"><button class="btn primary" onclick="saveClinic()">Save Clinic</button></div>
   </div>
   <div class="panel settings-section" data-settings="services"><h3>Services / Billing Codes</h3>
@@ -1393,12 +1391,6 @@ views.settings = function(){
 function inp2(id,l,v){return `<div class="field"><label>${l}</label><input id="c_${id}" value="${esc(v??'')}"/></div>`;}
 function inp2raw(id,l,v){return `<label>${l}</label><input id="c_${id}" value="${esc(v??'')}"/>`;}
 function saveClinic(){ ["name","provider","phone","email","currency","address","workStart","workEnd"].forEach(k=>DB.clinic[k]=$("#c_"+k).value); DB.clinic.taxRate=Number($("#c_taxRate").value)||0; save(); toast("Clinic saved"); }
-if(!nw || nw.length<6){ toast("New password must be at least 6 characters"); return; }
-  if(nw!==cf){ toast("New passwords do not match"); return; }
-  localStorage.setItem(ADMIN_PASS_KEY, nw);
-  ["admin_cur","admin_new","admin_confirm"].forEach(id=>{ const e=$("#"+id); if(e) e.value=""; });
-  toast("Admin password updated");
-}
 const imgKindLabel = kind => ({logo:"Logo",signature:"Signature",bodyChart:"Body chart"}[kind]||kind);
 function clinicImgPreview(kind){
   const src=DB.clinic[kind];
@@ -1623,5 +1615,5 @@ function printModal(){ window.print(); }
 initStorage();
 </script>
 
-<button type="button" class="portal-logout no-print" onclick="sessionStorage.removeItem('postureclinic_admin_auth');sessionStorage.removeItem('postureclinic_admin_auth_exp');PosturePortalAuth.signOut()">Sign out</button></body>
+<button type="button" class="portal-logout no-print" onclick="PosturePortalAuth.signOut()">Sign out</button></body>
 </html>

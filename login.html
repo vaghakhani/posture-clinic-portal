@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex, nofollow" />
+  <title>Staff Login | Posture Clinic Portal</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;600;700;800&family=Outfit:wght@500;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="portal-theme.css?v=1" />
+</head>
+<body>
+  <div class="login-shell">
+    <div class="login-card">
+      <div class="brand-row">
+        <div class="brand-mark">P</div>
+        <div class="brand-text">
+          <strong>Posture Clinic</strong>
+          <span>Staff Portal</span>
+        </div>
+      </div>
+      <h1>Sign in with Flowra</h1>
+      <p class="sub">Use your authorized clinic account. Access is limited to approved staff only.</p>
+
+      <div class="status error" id="error" hidden></div>
+      <div class="status success" id="success" hidden></div>
+
+      <form id="loginForm">
+        <label for="email">Email</label>
+        <input class="field-input" id="email" type="email" autocomplete="username" required placeholder="you@email.com" />
+
+        <label for="password">Password</label>
+        <input class="field-input" id="password" type="password" autocomplete="current-password" required placeholder="Your password" />
+
+        <div class="actions">
+          <button class="btn btn-primary" type="submit" id="submitBtn">Sign in to Portal</button>
+          <button class="btn" type="button" id="googleBtn">Continue with Google</button>
+        </div>
+      </form>
+
+      <p class="hint">
+        This portal uses the same secure Clerk login as <a href="https://flowra.ca/account.html" target="_blank" rel="noopener">flowra.ca/account</a>.
+        If you do not have access, contact the clinic administrator.
+      </p>
+    </div>
+    <p class="back"><a href="https://vaghakhani.github.io/posture-clinic-website/">← Back to public website</a></p>
+  </div>
+
+  <script src="auth-config.js?v=2"></script>
+  <script src="auth.js?v=2"></script>
+  <script src="login.js?v=2"></script>
+</body>
+</html>

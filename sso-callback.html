@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex, nofollow" />
+  <title>Completing sign in | Posture Clinic Portal</title>
+  <link rel="stylesheet" href="portal-theme.css?v=1" />
+</head>
+<body class="center-page">
+  <main class="callback-card">
+    <strong>Completing secure sign-in</strong>
+    <p id="callbackCopy">Please wait while your clinic portal session is created.</p>
+  </main>
+  <script src="auth-config.js?v=2"></script>
+  <script src="auth.js?v=2"></script>
+  <script>
+    PosturePortalAuth.completeOAuthReturn().catch(function (error) {
+      document.getElementById("callbackCopy").textContent = error.message || "Sign-in could not be completed.";
+      setTimeout(function () {
+        location.replace(PosturePortalAuth.getConfig().loginPage || "login.html");
+      }, 2600);
+    });
+  </script>
+</body>
+</html>
