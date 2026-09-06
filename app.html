@@ -1,0 +1,1627 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Posture Clinic — Dr. Ardeshir Ekhtiari</title>
+<style>
+  :root{
+    --bg:#0f172a; --panel:#ffffff; --muted:#64748b; --line:#e2e8f0;
+    --brand:#2563eb; --brand-dark:#1e40af; --brand-soft:#dbeafe;
+    --accent:#0891b2; --danger:#dc2626; --warn:#d97706; --ok:#16a34a;
+    --text:#0f172a; --soft:#f1f5f9;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;height:100%;font-family:"Segoe UI",Roboto,Arial,sans-serif;color:var(--text);background:var(--soft)}
+  button{font-family:inherit;cursor:pointer}
+  input,select,textarea{font-family:inherit;font-size:14px}
+  .app{display:flex;height:100vh;overflow:hidden}
+
+  /* Sidebar */
+  .sidebar{width:230px;background:linear-gradient(180deg,#1e40af,#2563eb);color:#e0edff;display:flex;flex-direction:column;flex-shrink:0}
+  .brand{padding:20px 18px;border-bottom:1px solid rgba(255,255,255,.15)}
+  .brand h1{font-size:18px;margin:0;letter-spacing:.3px}
+  .brand p{margin:4px 0 0;font-size:12px;opacity:.85}
+  .nav{padding:10px;flex:1;overflow:auto}
+  .nav a{display:flex;align-items:center;gap:10px;padding:11px 13px;border-radius:9px;color:#e0edff;text-decoration:none;font-size:14px;margin-bottom:4px}
+  .nav a:hover{background:rgba(255,255,255,.12)}
+  .nav a.active{background:#fff;color:#1e40af;font-weight:600}
+  .nav .ic{width:20px;text-align:center}
+  .sb-foot{padding:12px;font-size:11px;opacity:.8;border-top:1px solid rgba(255,255,255,.15)}
+
+  /* Main */
+  .main{flex:1;display:flex;flex-direction:column;overflow:hidden}
+  .topbar{height:60px;background:#fff;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:14px;padding:0 22px;flex-shrink:0}
+  .topbar h2{margin:0;font-size:18px}
+  .topbar .search{margin-left:auto;position:relative}
+  .topbar .search input{width:300px;padding:9px 12px 9px 34px;border:1px solid var(--line);border-radius:20px;background:var(--soft)}
+  .topbar .search::before{content:"\1F50D";position:absolute;left:11px;top:8px;font-size:13px;opacity:.6}
+  .content{flex:1;overflow:auto;padding:22px}
+
+  /* Cards / grid */
+  .cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:16px;margin-bottom:22px}
+  .stat{background:#fff;border:1px solid var(--line);border-radius:14px;padding:18px}
+  .stat .n{font-size:30px;font-weight:700;color:var(--brand-dark)}
+  .stat .l{color:var(--muted);font-size:13px;margin-top:2px}
+  .panel{background:#fff;border:1px solid var(--line);border-radius:14px;padding:20px;margin-bottom:20px}
+  .panel h3{margin:0 0 14px;font-size:16px}
+  .panel .desc{color:var(--muted);font-size:13px;margin:-8px 0 16px}
+
+  /* Buttons */
+  .btn{border:1px solid var(--line);background:#fff;padding:9px 15px;border-radius:9px;font-size:14px;color:var(--text)}
+  .btn:hover{background:var(--soft)}
+  .btn.primary{background:var(--brand);border-color:var(--brand);color:#fff}
+  .btn.primary:hover{background:var(--brand-dark)}
+  .btn.accent{background:var(--accent);border-color:var(--accent);color:#fff}
+  .btn.danger{background:#fff;border-color:#fecaca;color:var(--danger)}
+  .btn.danger:hover{background:#fef2f2}
+  .btn.sm{padding:6px 10px;font-size:12.5px}
+  .row-actions{display:flex;gap:8px;flex-wrap:wrap}
+
+  /* Forms */
+  .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+  .grid.three{grid-template-columns:repeat(3,1fr)}
+  .grid.four{grid-template-columns:repeat(4,1fr)}
+  .field{display:flex;flex-direction:column;gap:5px}
+  .field.full{grid-column:1/-1}
+  .field label{font-size:12.5px;color:var(--muted);font-weight:600}
+  .field input,.field select,.field textarea{padding:9px 11px;border:1px solid var(--line);border-radius:9px;width:100%;background:#fff}
+  .field textarea{resize:vertical;min-height:70px}
+  .field input:focus,.field textarea:focus,.field select:focus{outline:2px solid var(--brand-soft);border-color:var(--brand)}
+  .date-combo{display:flex;gap:6px}
+  .date-combo input{flex:1}
+  .date-combo button{width:34px;border:1px solid var(--line);border-radius:8px;background:#fff;color:var(--brand-dark);font-weight:700}
+  .date-combo button:hover{background:var(--brand-soft)}
+  .sec-title{font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--brand-dark);margin:22px 0 12px;padding-bottom:6px;border-bottom:2px solid var(--brand-soft)}
+  .sec-title:first-child{margin-top:0}
+
+  /* Table */
+  table{width:100%;border-collapse:collapse}
+  th,td{text-align:left;padding:11px 12px;border-bottom:1px solid var(--line);font-size:14px}
+  th{font-size:12px;text-transform:uppercase;letter-spacing:.5px;color:var(--muted)}
+  tbody tr:hover{background:var(--soft)}
+  .empty{text-align:center;color:var(--muted);padding:40px}
+  .tag{display:inline-block;padding:3px 9px;border-radius:20px;font-size:12px;font-weight:600}
+  .tag.green{background:#dcfce7;color:#15803d}
+  .tag.blue{background:#dbeafe;color:#1d4ed8}
+  .tag.amber{background:#fef3c7;color:#92400e}
+  .linkbtn{border:0;background:none;padding:0;color:var(--brand-dark);font-weight:700;text-align:left;cursor:pointer}
+  .linkbtn:hover{text-decoration:underline}
+  .email-value{word-break:break-all;color:var(--brand-dark);text-decoration:none}
+  .email-value:hover{text-decoration:underline}
+  .profile-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:10px;margin:14px 0 18px}
+  .profile-card{border:1px solid var(--line);border-radius:12px;background:#f8fafc;padding:12px}
+  .profile-card .v{font-size:19px;font-weight:800;color:var(--brand-dark)}
+  .profile-card .k{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;margin-top:2px}
+  .cal-toolbar{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+  .cal-title{font-size:18px;font-weight:800;color:var(--brand-dark);margin-right:auto}
+  .calendar-grid{display:grid;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#fff}
+  .time-grid{display:grid;border:1px solid var(--line);border-radius:12px;overflow:auto;max-height:620px;background:#fff}
+  .time-head{position:sticky;top:0;z-index:2;background:#eff6ff;color:var(--brand-dark);font-weight:800;text-align:center;padding:9px;border-right:1px solid #bfdbfe;border-bottom:1px solid #bfdbfe}
+  .time-label{background:#f8fafc;color:#64748b;font-size:12px;padding:8px;border-right:1px solid var(--line);border-bottom:1px solid var(--line);font-weight:700}
+  .time-cell{min-height:42px;border-right:1px solid var(--line);border-bottom:1px solid var(--line);padding:4px;background:#fff}
+  .cal-cell{min-height:112px;border-right:1px solid var(--line);border-bottom:1px solid var(--line);padding:8px;background:#fff}
+  .cal-cell:nth-child(7n){border-right:0}
+  .cal-day-head{background:#eff6ff;color:var(--brand-dark);font-weight:800;text-align:center;padding:9px;border-right:1px solid #bfdbfe}
+  .cal-day-head:nth-child(7n){border-right:0}
+  .cal-date{font-size:12px;font-weight:800;color:#334155;margin-bottom:6px}
+  .cal-muted{background:#f8fafc;color:#94a3b8}
+  .appt-chip{display:block;border:1px solid #bfdbfe;background:#dbeafe;color:#1e3a8a;border-radius:8px;padding:5px 7px;margin:4px 0;font-size:12px;line-height:1.25;text-align:left;width:100%}
+  .appt-chip b{display:block;color:#1e40af}
+  .day-slot{display:grid;grid-template-columns:86px 1fr;border-bottom:1px solid var(--line);min-height:42px}
+  .day-time{background:#f8fafc;color:#64748b;font-size:12px;padding:10px;border-right:1px solid var(--line);font-weight:700}
+  .day-bookings{padding:7px}
+  .year-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px}
+  .month-card{border:1px solid var(--line);border-radius:12px;padding:12px;background:#fff}
+  .month-card h4{margin:0 0 8px;color:var(--brand-dark)}
+
+  /* Pain diagram */
+  .bodywrap{display:flex;gap:26px;flex-wrap:wrap;align-items:flex-start}
+  .bodychart{position:relative;flex:1 1 520px;max-width:650px;min-width:300px}
+  .bodychart img{width:100%;display:block;background:#fff;border:1px solid var(--line);border-radius:14px;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .bodychart.noimg{min-height:420px;border:1px dashed var(--line);border-radius:14px;background:#fff}
+  .chartmsg{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;text-align:center;padding:24px;color:var(--muted);font-size:13px}
+  .hot{position:absolute;transform:translate(-50%,-50%);border-radius:50%;background:transparent;border:2px solid transparent;padding:0;cursor:pointer;transition:background .15s,border-color .15s}
+  .hot:hover{background:rgba(37,99,235,.30);border-color:rgba(37,99,235,.55)}
+  .hot.marked{background:rgba(239,68,68,.5);border-color:#b91c1c;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .painlist{flex:1;min-width:240px}
+  .painitem{display:flex;align-items:center;gap:10px;padding:8px 10px;border:1px solid var(--line);border-radius:9px;margin-bottom:8px;background:#fff}
+  .painitem.selected{border-color:#fecaca;background:#fff7f7}
+  .painitem .nm{flex:1;font-size:14px;font-weight:600}
+  .painitem .nm.clickable{cursor:pointer}
+  .painitem input[type="checkbox"]{width:auto}
+  .painitem select{padding:5px 8px;border:1px solid var(--line);border-radius:7px}
+  .legend{display:flex;gap:14px;flex-wrap:wrap;margin-top:10px;font-size:12px;color:var(--muted)}
+  .legend span{display:flex;align-items:center;gap:6px}
+  .dot{width:12px;height:12px;border-radius:3px;display:inline-block}
+
+  /* Invoice */
+  .inv-items th,.inv-items td{padding:8px}
+  .inv-total{display:flex;justify-content:flex-end;margin-top:14px}
+  .inv-total table{width:auto;min-width:280px}
+  .inv-total td{border:none;padding:5px 10px}
+  .inv-total .grand{font-size:18px;font-weight:700;color:var(--brand-dark)}
+  .letterhead{border-bottom:3px solid var(--brand);padding-bottom:14px;margin-bottom:18px}
+  .letterhead-top{display:flex;justify-content:space-between;gap:20px;align-items:flex-start}
+  .letterhead-brand{display:flex;gap:14px;align-items:flex-start}
+  .letterhead-logo{max-height:78px;max-width:190px;object-fit:contain}
+  .letterhead-clinic{font-size:22px;font-weight:800;color:var(--brand-dark);letter-spacing:.2px}
+  .letterhead-provider{font-size:14px;font-weight:600;color:#334155;margin-top:2px}
+  .letterhead-contact{font-size:12px;color:#64748b;line-height:1.5;margin-top:4px}
+  .letterhead-doc{text-align:right;min-width:220px}
+  .letterhead-doc h2{margin:0;color:#111827;font-size:26px;text-transform:uppercase;letter-spacing:.5px}
+  .letterhead-meta{font-size:12px;color:#475569;line-height:1.7;margin-top:8px}
+  .clinical-doc{background:#fff;color:#111827}
+  .clinical-head{display:flex;justify-content:space-between;gap:18px;border-bottom:2px solid var(--brand);padding-bottom:14px;margin-bottom:16px}
+  .clinical-brand{display:flex;align-items:flex-start;gap:12px}
+  .clinical-logo{max-height:72px;max-width:180px;object-fit:contain}
+  .clinical-title{text-align:right}
+  .clinical-title h2{margin:0;color:var(--brand-dark);font-size:24px}
+  .clinical-meta{font-size:12px;color:var(--muted);line-height:1.6;margin-top:6px}
+  .clinical-patient{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px;border:1px solid var(--line);border-radius:10px;padding:12px;background:#f8fafc}
+  .clinical-section{margin-top:14px}
+  .clinical-section h4{margin:0 0 6px;color:var(--brand-dark);font-size:13px;text-transform:uppercase;letter-spacing:.5px;border-bottom:1px solid var(--line);padding-bottom:5px}
+  .clinical-box{min-height:56px;border:1px solid var(--line);border-radius:8px;padding:10px;white-space:pre-wrap;background:#fff}
+  .clinical-sign{margin-top:28px;margin-left:auto;width:320px;text-align:center}
+  .clinical-sign img{max-height:64px;max-width:260px;object-fit:contain;margin-bottom:4px}
+  .clinical-sign .line{border-top:1px solid #111827;padding-top:6px;font-size:12px;color:#334155}
+  .print-only{display:none}
+  .print-footer{display:none}
+
+  /* Modal */
+  .modal-bg{position:fixed;inset:0;background:rgba(15,23,42,.5);display:none;align-items:center;justify-content:center;z-index:50;overflow:hidden;padding:16px}
+  .modal-bg.open{display:flex}
+  .modal{background:#fff;border-radius:16px;width:100%;max-width:960px;max-height:calc(100vh - 32px);overflow:auto;padding:24px;box-shadow:0 20px 60px rgba(0,0,0,.3)}
+  .modal.wide{max-width:1240px}
+  .modal-head{display:flex;align-items:center;margin:-24px -24px 16px;padding:16px 24px;background:#fff;border-bottom:1px solid var(--line);position:sticky;top:-24px;z-index:5}
+  .modal-head h3{margin:0;font-size:18px}
+  .modal-back{margin-right:10px;border:1px solid var(--line);background:#fff;border-radius:8px;padding:6px 10px;color:var(--brand-dark);font-weight:700}
+  .modal-back:hover{background:var(--brand-soft)}
+  .modal-head .x{margin-left:auto;border:none;background:none;font-size:22px;color:var(--muted)}
+  .modal-foot{display:flex;gap:10px;justify-content:flex-end;margin:22px -24px -24px;border-top:1px solid var(--line);padding:14px 24px;background:#fff;position:sticky;bottom:-24px;z-index:5}
+
+  .toast{position:fixed;bottom:24px;right:24px;background:#0f172a;color:#fff;padding:13px 20px;border-radius:10px;font-size:14px;opacity:0;transform:translateY(10px);transition:.25s;z-index:100}
+  .toast.show{opacity:1;transform:translateY(0)}
+  .muted{color:var(--muted)}
+  .pill-tabs{display:flex;gap:6px;margin-bottom:16px;flex-wrap:wrap}
+  .pill-tabs button{border:1px solid var(--line);background:#fff;padding:7px 14px;border-radius:20px;font-size:13px}
+  .pill-tabs button.on{background:var(--brand);color:#fff;border-color:var(--brand)}
+  .settings-section{display:none}
+  .settings-section.on{display:block}
+  .hint{font-size:12px;color:var(--muted)}
+  .scale{display:flex;gap:4px;flex-wrap:wrap}
+  .scale button{width:34px;height:34px;border:1px solid var(--line);border-radius:8px;background:#fff;font-weight:600}
+  .scale button.on{background:var(--danger);color:#fff;border-color:var(--danger)}
+
+  /* Print */
+  @media print{
+    @page{margin:.55in}
+    .sidebar,.topbar,.no-print,.modal-foot,.modal-head{display:none !important}
+    .app,.main,.content{display:block;height:auto;overflow:visible}
+    body.modal-open .app{display:none !important}
+    .modal-bg{position:static;background:none;display:block;padding:0}
+    .modal{box-shadow:none;max-width:none;border-radius:0;padding:0}
+    body{background:#fff}
+    .content{padding:0}
+    .panel{border:0;border-radius:0;padding:0;margin:0;background:#fff}
+    .print-area{padding:0;font-size:12px;line-height:1.45}
+    .print-only{display:block !important}
+    .print-area input,.print-area textarea,.print-area select,
+    body:not(.modal-open) .content input,body:not(.modal-open) .content textarea,body:not(.modal-open) .content select{border:0 !important;background:transparent !important;box-shadow:none !important;padding:0 !important;color:#111827 !important;-webkit-appearance:none;appearance:none}
+    .print-area .date-combo button,
+    body:not(.modal-open) .content .date-combo button{display:none !important}
+    .print-area textarea,body:not(.modal-open) .content textarea{min-height:0;height:auto;resize:none;overflow:visible}
+    .print-area table,body:not(.modal-open) .content table{page-break-inside:auto;border:1px solid #cbd5e1}
+    .print-area th,body:not(.modal-open) .content th{background:#eff6ff;color:#1e40af;border-bottom:1px solid #bfdbfe;font-size:11px}
+    .print-area td,body:not(.modal-open) .content td{border-bottom:1px solid #e2e8f0}
+    .print-area tr{page-break-inside:avoid;page-break-after:auto}
+    .inv-items th,.inv-items td{border-bottom:1px solid #d1d5db}
+    .print-area .sec-title,body:not(.modal-open) .content .sec-title{background:#eff6ff;border:1px solid #bfdbfe;border-left:4px solid var(--brand);border-radius:4px;color:#1e40af;padding:7px 9px;margin:18px 0 10px}
+    .print-area .grid,body:not(.modal-open) .content .grid{gap:10px}
+    .print-area .field,body:not(.modal-open) .content .field{border:1px solid #e2e8f0;border-radius:6px;padding:8px;background:#fbfdff;break-inside:avoid}
+    .print-area .field label,body:not(.modal-open) .content .field label,.hint{color:#475569;font-size:10px;text-transform:uppercase;letter-spacing:.35px}
+    .print-area p{margin:7px 0}
+    .inv-total table{border:0}
+    .inv-total td{border:0}
+    .clinical-box{border:1px solid #cbd5e1;background:#fbfdff;border-radius:6px;min-height:68px}
+    .clinical-sign{break-inside:avoid}
+    .bodywrap{break-inside:auto;page-break-inside:auto;gap:12px}
+    .bodychart{flex:0 1 3.7in;max-width:3.7in;min-width:2.6in}
+    .bodychart img{max-height:4.4in;object-fit:contain}
+    .painlist{min-width:2.2in;font-size:11px}
+    .painitem{padding:5px 7px;margin-bottom:4px;break-inside:avoid}
+    .painlist .hint,.painlist .painitem:not(.selected) .muted{display:none !important}
+    .painlist .painitem:not(.selected){display:none !important}
+    .painlist input[type="checkbox"]{display:none !important}
+    .clinical-doc{font-size:12px}
+    .clinical-patient{break-inside:avoid;grid-template-columns:repeat(2,1fr)}
+    .clinical-section{break-inside:avoid}
+    .print-footer{display:none !important}
+    body::after{content:"Printed from Posture Clinic";position:fixed;bottom:.18in;right:.55in;font-size:10px;color:#64748b}
+  }
+</style>
+<link rel="stylesheet" href="portal-neumorph.css" />
+</head>
+<body>
+<script src="auth-config.js?v=1"></script>
+<script src="auth.js?v=1"></script>
+<script>PosturePortalAuth.requireAppAccess();</script>
+<div class="app">
+  <aside class="sidebar">
+    <div class="brand">
+      <h1>Posture Clinic</h1>
+      <p>Dr. Ardeshir Ekhtiari, DC</p>
+    </div>
+    <nav class="nav" id="nav">
+      <a data-view="dashboard" class="active"><span class="ic">&#128202;</span> Dashboard</a>
+      <a data-view="patients"><span class="ic">&#128101;</span> Patients</a>
+      <a data-view="intake"><span class="ic">&#128221;</span> New Intake</a>
+      <a data-view="visits"><span class="ic">&#129658;</span> SOAP Notes</a>
+      <a data-view="invoices"><span class="ic">&#129534;</span> Invoices</a>
+      <a data-view="appointments"><span class="ic">&#128197;</span> Appointments</a>
+      <a data-view="calendar"><span class="ic">&#128467;</span> Calendar</a>
+      <a data-view="settings"><span class="ic">&#9881;</span> Settings &amp; Backup</a>
+    </nav>
+    <div class="sb-foot">Local &amp; private — data stays on this PC.</div>
+  </aside>
+
+  <div class="main">
+    <div class="topbar">
+      <h2 id="viewTitle">Dashboard</h2>
+      <button id="storageBadge" class="btn sm" style="margin-left:14px" onclick="storageBadgeClick()">Local only</button>
+      <div class="search">
+        <input id="globalSearch" placeholder="Search patients by name, phone, DOB…" />
+      </div>
+    </div>
+    <div class="content" id="content"></div>
+  </div>
+</div>
+
+<div class="modal-bg" id="modalBg"><div class="modal" id="modal"></div></div>
+<div class="toast" id="toast"></div>
+
+<script>
+/* ============================ DATA LAYER ============================ */
+const DB_KEY = "postureclinic_db_v1";
+const LEGACY_DB_KEY = "painclinic_db_v1";
+const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2,7);
+const todayISO = () => new Date().toISOString().slice(0,10);
+const DEFAULT_SERVICES = [
+  {code:"98940", desc:"Chiropractic Manipulation (1-2 regions)", price:65},
+  {code:"98941", desc:"Chiropractic Manipulation (3-4 regions)", price:85},
+  {code:"97110", desc:"Therapeutic Exercise", price:45},
+  {code:"97140", desc:"Manual Therapy", price:50},
+  {code:"99203", desc:"New Patient Exam", price:150},
+  {code:"99213", desc:"Established Patient Exam", price:90},
+];
+function loadDB(){
+  try{
+    let raw = localStorage.getItem(DB_KEY);
+    if(!raw && LEGACY_DB_KEY){ raw = localStorage.getItem(LEGACY_DB_KEY); if(raw) localStorage.setItem(DB_KEY, raw); }
+    return JSON.parse(raw) || seed();
+  }catch(e){ return seed(); }
+}
+function seed(){
+  const db = { patients:[], visits:[], invoices:[], appointments:[],
+    clinic:{ name:"Posture Clinic", provider:"Dr. Ardeshir Ekhtiari, DC",
+      address:"", phone:"647-835-8118", email:"Ardeshir@DrEkhtiari.com", taxRate:0, currency:"$", workStart:"08:00", workEnd:"18:00",
+      services:JSON.parse(JSON.stringify(DEFAULT_SERVICES)),
+      serviceProfiles:[{id:"default",name:"Default Chiropractic",services:JSON.parse(JSON.stringify(DEFAULT_SERVICES))}],
+      activeServiceProfileId:"default" } };
+  localStorage.setItem(DB_KEY, JSON.stringify(db));
+  return db;
+}
+let DB = loadDB();
+
+/* ---- Portable file storage (data lives in a file that travels with the app) ---- */
+let fileHandle = null;          // linked PostureClinicData.json handle
+let needsReconnect = false;     // handle exists but permission must be re-granted (needs a click)
+let _writeTimer = null, _dirty = false;
+
+function save(){
+  localStorage.setItem(DB_KEY, JSON.stringify(DB));   // fast local mirror
+  scheduleFileWrite();                                // persist to portable data file
+}
+function scheduleFileWrite(){
+  if(!fileHandle) return;
+  _dirty = true; clearTimeout(_writeTimer);
+  _writeTimer = setTimeout(writeFile, 500);
+}
+async function writeFile(){
+  if(!fileHandle || !_dirty) return;
+  try{
+    const w = await fileHandle.createWritable();
+    await w.write(JSON.stringify(DB, null, 2));
+    await w.close();
+    _dirty = false; updateStorageBadge();
+  }catch(e){ console.warn("File write failed", e); }
+}
+
+/* IndexedDB: remember the linked file handle between sessions */
+function idbOpen(name="postureclinic_fs"){ return new Promise((res,rej)=>{ const r=indexedDB.open(name,1);
+  r.onupgradeneeded=()=>r.result.createObjectStore("h"); r.onsuccess=()=>res(r.result); r.onerror=()=>rej(r.error); }); }
+async function idbSet(k,v){ const db=await idbOpen(); return new Promise((res,rej)=>{ const t=db.transaction("h","readwrite");
+  t.objectStore("h").put(v,k); t.oncomplete=()=>res(); t.onerror=()=>rej(t.error); }); }
+async function idbGet(k){ const db=await idbOpen(); return new Promise((res,rej)=>{ const t=db.transaction("h","readonly");
+  const rq=t.objectStore("h").get(k); rq.onsuccess=()=>res(rq.result); rq.onerror=()=>rej(rq.error); }); }
+async function idbDel(k){ const db=await idbOpen(); return new Promise((res)=>{ const t=db.transaction("h","readwrite");
+  t.objectStore("h").delete(k); t.oncomplete=()=>res(); }); }
+
+async function permGranted(h,write){ const o={mode:write?"readwrite":"read"};
+  try{ return (await h.queryPermission(o))==="granted"; }catch(e){ return false; } }
+async function permRequest(h,write){ const o={mode:write?"readwrite":"read"};
+  try{ if((await h.queryPermission(o))==="granted") return true; return (await h.requestPermission(o))==="granted"; }catch(e){ return false; } }
+
+const fsSupported = () => !!(window.showSaveFilePicker && window.showOpenFilePicker);
+
+/* Create/choose the portable data file and start saving to it */
+async function connectDataFile(){
+  if(!fsSupported()){ toast("This browser can't link a data file. Use Export/Import backups instead."); return; }
+  try{
+    const h = await window.showSaveFilePicker({ suggestedName:"PostureClinicData.json",
+      types:[{description:"Posture Clinic Data",accept:{"application/json":[".json"]}}] });
+    fileHandle = h; needsReconnect=false; await idbSet("dataFile",h);
+    _dirty = true; await writeFile();
+    toast("Data file linked — everything now saves into this file.");
+    updateStorageBadge(); if(current==="settings") views.settings();
+  }catch(e){ if(e.name!=="AbortError") toast("Could not link data file"); }
+}
+/* Open an existing data file (e.g. after moving the folder to a new PC) */
+async function openDataFile(){
+  if(!fsSupported()){ toast("This browser can't open a data file. Use Import backup instead."); return; }
+  try{
+    const [h] = await window.showOpenFilePicker({ types:[{description:"Posture Clinic Data",accept:{"application/json":[".json"]}}] });
+    if(!(await permRequest(h,true))) return;
+    const txt = await (await h.getFile()).text();
+    DB = JSON.parse(txt); fileHandle=h; needsReconnect=false; await idbSet("dataFile",h);
+    localStorage.setItem(DB_KEY, JSON.stringify(DB));
+    toast("Loaded data from file."); go("dashboard");
+  }catch(e){ if(e.name!=="AbortError") toast("Could not open data file"); }
+}
+async function disconnectDataFile(){ fileHandle=null; needsReconnect=false; await idbDel("dataFile"); updateStorageBadge(); if(current==="settings") views.settings(); toast("Unlinked data file (still saved locally)."); }
+
+/* Re-grant permission after a restart (browsers require a click) */
+async function reconnectDataFile(){
+  const h = await idbGet("dataFile"); if(!h){ connectDataFile(); return; }
+  if(await permRequest(h,true)){
+    fileHandle=h; needsReconnect=false;
+    try{ const txt=await (await h.getFile()).text(); if(txt.trim()){ DB=JSON.parse(txt); localStorage.setItem(DB_KEY,JSON.stringify(DB)); } }catch(e){}
+    updateStorageBadge(); toast("Reconnected to data file."); go(current);
+  }
+}
+function storageBadgeClick(){ if(needsReconnect) reconnectDataFile(); else if(fileHandle){ go("settings"); } else connectDataFile(); }
+function updateStorageBadge(){
+  const b = document.getElementById("storageBadge"); if(!b) return;
+  if(needsReconnect){ b.textContent="\u26A0 Reconnect data file"; b.style.background="#fef3c7"; b.style.borderColor="#fcd34d"; b.title="Click to reconnect your data file"; }
+  else if(fileHandle){ b.textContent="\uD83D\uDCBE Data file linked"; b.style.background="#dbeafe"; b.style.borderColor="#93c5fd"; b.title=fileHandle.name||"Linked"; }
+  else if(fsSupported()){ b.textContent="\u26A0 Link data file"; b.style.background="#fee2e2"; b.style.borderColor="#fecaca"; b.title="Click to make your data portable"; }
+  else { b.textContent="\uD83D\uDCBE Local only"; b.style.background=""; b.style.borderColor=""; b.title="Use Export/Import backups to move data"; }
+}
+async function idbGetLegacy(k){
+  try{ const db=await idbOpen("painclinic_fs"); return new Promise((res,rej)=>{ const t=db.transaction("h","readonly");
+    const rq=t.objectStore("h").get(k); rq.onsuccess=()=>res(rq.result); rq.onerror=()=>rej(rq.error); }); }catch(e){ return null; }
+}
+async function initStorage(){
+  try{
+    let h = await idbGet("dataFile");
+    if(!h){ h = await idbGetLegacy("dataFile"); if(h) await idbSet("dataFile", h); }
+    if(h){
+      if(await permGranted(h,true)){
+        fileHandle=h;
+        try{ const txt=await (await h.getFile()).text(); if(txt.trim()){ DB=JSON.parse(txt); localStorage.setItem(DB_KEY,JSON.stringify(DB)); } }catch(e){}
+      } else { needsReconnect=true; }
+    }
+  }catch(e){}
+  const last = localStorage.getItem(LAST_VIEW_KEY) || localStorage.getItem(LEGACY_LAST_VIEW_KEY);
+  go(views[last]?last:"dashboard"); updateStorageBadge();
+}
+const money = n => DB.clinic.currency + (Number(n)||0).toFixed(2);
+const esc = s => (s==null?"":String(s)).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const patientById = id => DB.patients.find(p=>p.id===id);
+const fullName = p => p ? `${p.first||""} ${p.last||""}`.trim() : "Unknown";
+const emailView = e => e ? `<a class="email-value" href="mailto:${esc(e)}">${esc(e)}</a>` : "—";
+
+/* ============================ UI HELPERS ============================ */
+const $ = s => document.querySelector(s);
+const content = $("#content");
+function toast(msg){ const t=$("#toast"); t.textContent=msg; t.classList.add("show"); setTimeout(()=>t.classList.remove("show"),2200); }
+let modalStack = [];
+function openModal(html, wide, replace){
+  const m=$("#modal"), bg=$("#modalBg");
+  if(bg.classList.contains("open") && !replace) modalStack.push({html:m.innerHTML,className:m.className});
+  m.className="modal"+(wide?" wide":""); m.innerHTML=html; bg.classList.add("open"); document.body.classList.add("modal-open");
+  updateModalBack();
+}
+function updateModalBack(){
+  const h=$("#modal .modal-head"); if(!h) return;
+  h.querySelector(".modal-back")?.remove();
+  if(modalStack.length) h.insertAdjacentHTML("afterbegin",`<button class="modal-back" onclick="modalBack()">&larr; Back</button>`);
+}
+function modalBack(){
+  const prev = modalStack.pop(); if(!prev){ closeModal(); return; }
+  const m=$("#modal"); m.className=prev.className; m.innerHTML=prev.html; updateModalBack();
+}
+function closeModal(){ $("#modalBg").classList.remove("open"); document.body.classList.remove("modal-open"); modalStack=[]; }
+$("#modalBg").addEventListener("click",e=>{ if(e.target.id==="modalBg") closeModal(); });
+function printStamp(){ return new Date().toLocaleDateString() + " " + new Date().toLocaleTimeString([], {hour:"2-digit", minute:"2-digit"}); }
+function letterhead(title, rows){
+  const c=DB.clinic, contact=[c.address,c.phone,c.email].filter(Boolean).join(" | ");
+  return `<div class="letterhead">
+    <div class="letterhead-top">
+      <div class="letterhead-brand">
+        ${c.logo?`<img class="letterhead-logo" src="${esc(c.logo)}" alt="Clinic logo"/>`:""}
+        <div>
+          <div class="letterhead-clinic">${esc(c.name||"Posture Clinic")}</div>
+          <div class="letterhead-provider">${esc(c.provider||"Dr. Ardeshir Ekhtiari, DC")}</div>
+          <div class="letterhead-contact">${esc(contact||"")}</div>
+        </div>
+      </div>
+      <div class="letterhead-doc">
+        <h2>${esc(title)}</h2>
+        <div class="letterhead-meta">
+          <div><b>Printed:</b> ${printStamp()}</div>
+          ${(rows||[]).map(r=>`<div><b>${esc(r[0])}:</b> ${esc(r[1]||"—")}</div>`).join("")}
+        </div>
+      </div>
+    </div>
+  </div>`;
+}
+
+/* ============================ ROUTER ============================ */
+const views = {};
+let current = "dashboard";
+const LAST_VIEW_KEY = "postureclinic_last_view";
+const LEGACY_LAST_VIEW_KEY = "painclinic_last_view";
+const SCROLL_KEY = "postureclinic_scroll_";
+const LEGACY_SCROLL_KEY = "painclinic_scroll_";
+function go(view){
+  if(content && current) localStorage.setItem(SCROLL_KEY+current, content.scrollTop);
+  current = view;
+  localStorage.setItem(LAST_VIEW_KEY, view);
+  document.querySelectorAll("#nav a").forEach(a=>a.classList.toggle("active",a.dataset.view===view));
+  $("#viewTitle").textContent = {dashboard:"Dashboard",patients:"Patients",intake:"New Patient Intake",
+    visits:"SOAP Notes",invoices:"Invoices",appointments:"Appointments",calendar:"Calendar",settings:"Settings & Backup"}[view];
+  (views[view]||views.dashboard)();
+  setTimeout(()=>{ content.scrollTop = Number(localStorage.getItem(SCROLL_KEY+view)||localStorage.getItem(LEGACY_SCROLL_KEY+view)||0); },0);
+}
+document.querySelectorAll("#nav a").forEach(a=>a.addEventListener("click",()=>go(a.dataset.view)));
+content.addEventListener("scroll",()=>localStorage.setItem(SCROLL_KEY+current, content.scrollTop));
+$("#globalSearch").addEventListener("input",e=>{
+  if(current!=="patients"){ go("patients"); }
+  const box = $("#patientSearch"); if(box){ box.value=e.target.value; renderPatientTable(e.target.value); }
+});
+function matchesText(q,...parts){
+  q=(q||"").toLowerCase().trim();
+  return !q || parts.join(" ").toLowerCase().includes(q);
+}
+
+/* ============================ DASHBOARD ============================ */
+views.dashboard = function(){
+  const upcoming = DB.appointments.filter(a=>a.date>=todayISO()).sort((a,b)=>a.date.localeCompare(b.date)).slice(0,5);
+  const outstanding = DB.invoices.reduce((s,i)=>s+invTotals(i).balance,0);
+  content.innerHTML = `
+    <div class="cards">
+      <div class="stat"><div class="n">${DB.patients.length}</div><div class="l">Total Patients</div></div>
+      <div class="stat"><div class="n">${DB.visits.length}</div><div class="l">SOAP Notes</div></div>
+      <div class="stat"><div class="n">${DB.invoices.length}</div><div class="l">Invoices</div></div>
+      <div class="stat"><div class="n">${money(outstanding)}</div><div class="l">Outstanding Balance</div></div>
+    </div>
+    <div class="panel">
+      <h3>Quick Actions</h3>
+      <div class="row-actions">
+        <button class="btn primary" onclick="go('intake')">+ New Patient Intake</button>
+        <button class="btn accent" onclick="newVisit()">+ New SOAP Note</button>
+        <button class="btn" onclick="newInvoice()">+ New Invoice</button>
+        <button class="btn" onclick="go('appointments')">Schedule Appointment</button>
+      </div>
+    </div>
+    <div class="panel">
+      <h3>Upcoming Appointments</h3>
+      ${upcoming.length? `<table><thead><tr><th>Date</th><th>Time</th><th>Patient</th><th>Reason</th></tr></thead>
+      <tbody>${upcoming.map(a=>`<tr><td>${a.date}</td><td>${esc(a.time)}</td><td>${esc(fullName(patientById(a.patientId)))}</td><td>${esc(a.reason)}</td></tr>`).join("")}</tbody></table>`
+      : `<div class="empty">No upcoming appointments.</div>`}
+    </div>
+    <div class="panel">
+      <h3>Recent Patients</h3>
+      ${DB.patients.slice(-5).reverse().map(p=>`<div style="padding:8px 0;border-bottom:1px solid var(--line)"><button class="linkbtn" onclick="viewPatient('${p.id}')">${esc(fullName(p))}</button> <span class="muted">— ${esc(p.phone||"no phone")} · ${esc(p.dob||"")}</span> <button class="btn sm" style="float:right" onclick="viewPatient('${p.id}')">Open</button></div>`).join("") || `<div class="empty">No patients yet. Start with a New Intake.</div>`}
+    </div>`;
+};
+
+/* ============================ PATIENTS ============================ */
+views.patients = function(){
+  content.innerHTML = `
+    <div class="panel">
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px">
+        <h3 style="margin:0">Patients</h3>
+        <input id="patientSearch" class="btn" style="margin-left:auto;width:280px" placeholder="Search name / phone / DOB…" oninput="renderPatientTable(this.value)"/>
+        <button class="btn primary" onclick="go('intake')">+ New Intake</button>
+      </div>
+      <div id="patientTable"></div>
+    </div>`;
+  renderPatientTable("");
+};
+function renderPatientTable(q){
+  q=(q||"").toLowerCase().trim();
+  const list = DB.patients.filter(p=>{
+    if(!q) return true;
+    return (fullName(p)+" "+(p.phone||"")+" "+(p.dob||"")+" "+(p.email||"")).toLowerCase().includes(q);
+  }).sort((a,b)=>fullName(a).localeCompare(fullName(b)));
+  const el = $("#patientTable"); if(!el) return;
+  el.innerHTML = list.length? `<table><thead><tr><th>Name</th><th>DOB</th><th>Phone</th><th>Chief Complaint</th><th>Visits</th><th></th></tr></thead>
+    <tbody>${list.map(p=>{
+      const v = DB.visits.filter(x=>x.patientId===p.id).length;
+      return `<tr>
+        <td><button class="linkbtn" onclick="viewPatient('${p.id}')">${esc(fullName(p))}</button></td>
+        <td>${esc(p.dob||"")}</td>
+        <td>${esc(p.phone||"")}</td>
+        <td>${esc((p.chiefComplaint||"").slice(0,40))}</td>
+        <td><span class="tag green">${v}</span></td>
+        <td class="row-actions" style="justify-content:flex-end">
+          <button class="btn sm" onclick="viewPatient('${p.id}')">Open</button>
+          <button class="btn sm" onclick="newVisit('${p.id}')">SOAP</button>
+          <button class="btn sm" onclick="newInvoice('${p.id}')">Invoice</button>
+        </td></tr>`;
+    }).join("")}</tbody></table>`
+    : `<div class="empty">No matching patients.</div>`;
+}
+
+function viewPatient(id){
+  const p = patientById(id); if(!p) return;
+  const visits = DB.visits.filter(v=>v.patientId===id).sort((a,b)=>b.date.localeCompare(a.date));
+  const invs = DB.invoices.filter(v=>v.patientId===id).sort((a,b)=>b.date.localeCompare(a.date));
+  const billed = invs.reduce((s,i)=>s+invTotals(i).total,0);
+  const paid = invs.reduce((s,i)=>s+invTotals(i).paid,0);
+  const balance = invs.reduce((s,i)=>s+invTotals(i).balance,0);
+  const services = invs.reduce((s,i)=>s+(i.items||[]).reduce((n,it)=>n+(Number(it.qty)||0),0),0);
+  const nextAppt = DB.appointments.filter(a=>a.patientId===id && a.date>=todayISO()).sort((a,b)=>(a.date+a.time).localeCompare(b.date+b.time))[0];
+  activePain = p.pain || {};
+  openModal(`
+    <div class="modal-head"><h3>${esc(fullName(p))}</h3><button class="x" onclick="closeModal()">&times;</button></div>
+    <div class="print-area">
+      <div class="print-only">${letterhead("Patient Chart", [["Patient",fullName(p)],["DOB",p.dob]])}</div>
+      <h2 class="no-print" style="margin:0 0 6px;color:var(--brand-dark)">Patient Chart</h2>
+      <p class="muted no-print" style="margin-top:0">Intake, pain map summary, SOAP notes, and invoices for ${esc(fullName(p))}</p>
+      <div class="profile-cards">
+        <div class="profile-card"><div class="v">${visits.length}</div><div class="k">SOAP Visits</div></div>
+        <div class="profile-card"><div class="v">${services}</div><div class="k">Services Billed</div></div>
+        <div class="profile-card"><div class="v">${money(billed)}</div><div class="k">Total Billed</div></div>
+        <div class="profile-card"><div class="v">${money(paid)}</div><div class="k">Total Paid</div></div>
+        <div class="profile-card"><div class="v" style="color:${balance>0?'var(--danger)':'var(--ok)'}">${money(balance)}</div><div class="k">Outstanding</div></div>
+        <div class="profile-card"><div class="v">${esc(visits[0]?.date||"—")}</div><div class="k">Last Visit</div></div>
+        <div class="profile-card"><div class="v">${esc(nextAppt?`${nextAppt.date} ${nextAppt.time||""}`:"—")}</div><div class="k">Next Appointment</div></div>
+        <div class="profile-card"><div class="v">${Object.keys(p.pain||{}).length}</div><div class="k">Pain Areas</div></div>
+      </div>
+      <div class="grid three">
+        <div><div class="hint">Name</div>${esc(fullName(p)||"—")}</div>
+        <div><div class="hint">Date of Birth</div>${esc(p.dob||"—")}</div>
+        <div><div class="hint">Sex</div>${esc(p.sex||"—")}</div>
+        <div><div class="hint">Phone</div>${esc(p.phone||"—")}</div>
+        <div><div class="hint">Email</div>${emailView(p.email)}</div>
+        <div><div class="hint">Occupation</div>${esc(p.occupation||"—")}</div>
+        <div><div class="hint">Address</div>${esc(p.address||"—")}</div>
+        <div><div class="hint">Insurance</div>${esc(p.insurance||"—")} ${esc(p.policy||"")}${p.group?" · Group "+esc(p.group):""}</div>
+        <div><div class="hint">Emergency Contact</div>${esc(p.emergencyName||"—")} ${p.emergencyRel?"("+esc(p.emergencyRel)+")":""} ${esc(p.emergencyPhone||"")}</div>
+      </div>
+      <div class="sec-title">Intake Form Information</div>
+      <p><b>Complaint:</b> ${esc(p.chiefComplaint||"—")}</p>
+      <p><b>Pain since:</b> ${esc(p.painOnset||"—")} &nbsp; <b>Pain type:</b> ${esc(p.painType||"—")} &nbsp; <b>Pain level:</b> ${esc(p.painLevel||"—")}/10 &nbsp; <b>Frequency:</b> ${esc(p.painFreq||"—")}</p>
+      <p><b>Medical history:</b> ${esc(p.medicalHistory||"—")}</p>
+      <p><b>Medications:</b> ${esc(p.medications||"—")} &nbsp; <b>Allergies:</b> ${esc(p.allergies||"—")}</p>
+      <p><b>Prior treatment:</b> ${esc(p.priorTreatment||"—")}</p>
+      <p><b>Smoker:</b> ${esc(p.smoker||"—")} &nbsp; <b>Exercise:</b> ${esc(p.exercise||"—")} &nbsp; <b>Pregnant:</b> ${esc(p.pregnant||"—")} &nbsp; <b>Consent:</b> ${p.consent?"Yes":"No"}</p>
+      ${Object.keys(p.pain||{}).length?`<div class="sec-title">Marked Areas of Pain</div>
+      <ul style="margin:0;padding-left:20px">${Object.keys(p.pain).map(k=>`<li>${esc(k)} — ${esc(String(p.pain[k].intensity??""))}/10${p.pain[k].type?" · "+esc(p.pain[k].type):""}</li>`).join("")}</ul>`:""}
+      ${Object.keys(p.pain||{}).length?`<div class="clinical-section print-only"><h4>Intake Body Pain Diagram</h4>${bodyChart()}</div>`:""}
+      <div class="sec-title">SOAP Notes (${visits.length})</div>
+      ${visits.length? visits.map(v=>`<div class="painitem"><span class="nm">${v.date} — ${esc(v.assessment||"Visit")}</span>
+        <span class="muted no-print">${Object.keys(v.pain||{}).length} pain area(s)</span>
+        <button class="btn sm no-print" onclick="openVisit('${v.id}')">Open / Print SOAP</button>
+        <div class="full" style="width:100%;font-size:13px;color:var(--muted)">
+          <b>S:</b> ${esc((v.subjective||"—").slice(0,160))}<br>
+          <b>O:</b> ${esc((v.objective||"—").slice(0,160))}<br>
+          <b>A:</b> ${esc((v.assessment||"—").slice(0,160))}<br>
+          <b>Services:</b> ${esc(soapServiceSummary(v)||"—")}<br>
+          <b>P:</b> ${esc((v.plan||"—").slice(0,160))}
+        </div>
+      </div>`).join("") : `<div class="muted" style="padding:6px 0">No notes yet.</div>`}
+      <div class="sec-title">Invoices (${invs.length})</div>
+      ${invs.length? invs.map(i=>{ const it=invTotals(i); return `<div class="painitem"><span class="nm">${i.number||""} — ${i.date} — Total ${money(it.total)} · Paid ${money(it.paid)} · Outstanding ${money(it.balance)}</span>
+        <span class="tag ${i.status==='Paid'?'green':'amber'}">${i.status}</span>
+        <button class="btn sm no-print" onclick="openInvoice('${i.id}')">Open / Print Invoice</button></div>`; }).join("") : `<div class="muted" style="padding:6px 0">No invoices yet.</div>`}
+    </div>
+    <div class="modal-foot no-print">
+      <button class="btn danger" onclick="deletePatient('${p.id}')">Delete</button>
+      <button class="btn" onclick="closeModal()">Close</button>
+      <button class="btn" onclick="printModal()">Generate PDF / Print Full Chart</button>
+      <button class="btn" onclick="go('intake');editPatient('${p.id}')">Edit Intake</button>
+      <button class="btn accent" onclick="newVisit('${p.id}')">+ SOAP Note</button>
+      <button class="btn primary" onclick="newInvoice('${p.id}')">+ Invoice</button>
+    </div>
+  `, true);
+}
+function deletePatient(id){
+  if(!confirm("Delete this patient and ALL their notes & invoices?")) return;
+  DB.patients = DB.patients.filter(p=>p.id!==id);
+  DB.visits = DB.visits.filter(v=>v.patientId!==id);
+  DB.invoices = DB.invoices.filter(v=>v.patientId!==id);
+  save(); closeModal(); toast("Patient deleted"); go("patients");
+}
+
+/* ============================ INTAKE FORM ============================ */
+let editingPatientId = null;
+views.intake = function(){
+  const p = editingPatientId ? patientById(editingPatientId) : {};
+  intakePain = editingPatientId ? JSON.parse(JSON.stringify(p.pain||{})) : {};
+  activePain = intakePain;
+  content.innerHTML = `
+    <div class="panel">
+      <div class="print-only">${letterhead(editingPatientId?"Patient Intake Form":"New Patient Intake Form", editingPatientId?[["Patient",fullName(p)],["DOB",p.dob]]:[])}</div>
+      <h3>${editingPatientId?"Edit Patient":"New Patient Intake Form"}</h3>
+      <p class="desc">Complete the patient's demographic, insurance, and clinical intake information.</p>
+      <div class="sec-title">Patient Information</div>
+      <div class="grid three">
+        ${inp("first","First Name",p.first)}
+        ${inp("last","Last Name",p.last)}
+        ${dateField("dob","Date of Birth",p.dob,1900,new Date().getFullYear())}
+        ${sel("sex","Sex",["","Male","Female","Other"],p.sex)}
+        ${inp("phone","Phone",p.phone,"tel")}
+        ${inp("email","Email",p.email,"email")}
+        ${inp("occupation","Occupation",p.occupation)}
+      </div>
+      <div class="grid"><div class="field full">${inpRaw("address","Home Address",p.address)}</div></div>
+
+      <div class="sec-title">Insurance</div>
+      <div class="grid three">
+        ${inp("insurance","Insurance Provider",p.insurance)}
+        ${inp("policy","Policy / Member #",p.policy)}
+        ${inp("group","Group #",p.group)}
+      </div>
+
+      <div class="sec-title">Emergency Contact</div>
+      <div class="grid three">
+        ${inp("emergencyName","Name",p.emergencyName)}
+        ${inp("emergencyRel","Relationship",p.emergencyRel)}
+        ${inp("emergencyPhone","Phone",p.emergencyPhone,"tel")}
+      </div>
+
+      <div class="sec-title">Chief Complaint & Pain</div>
+      <div class="grid">
+        <div class="field full">${inpRaw("chiefComplaint","Chief Complaint / Reason for Visit",p.chiefComplaint)}</div>
+        ${inp("painOnset","Pain started (date / how)",p.painOnset)}
+        ${sel("painType","Pain Type",["","Sharp","Dull","Burning","Aching","Throbbing","Tingling","Numbness","Stiffness"],p.painType)}
+        <div class="field"><label>Current Pain Level (0–10)</label>
+          <div class="scale" id="painScale">${[0,1,2,3,4,5,6,7,8,9,10].map(n=>`<button type="button" class="${String(p.painLevel)==String(n)?'on':''}" onclick="setPain(${n})">${n}</button>`).join("")}</div>
+          <input type="hidden" id="f_painLevel" value="${p.painLevel??''}"/></div>
+        ${sel("painFreq","Frequency",["","Constant","Frequent","Intermittent","Occasional","With activity"],p.painFreq)}
+      </div>
+
+      <div class="sec-title">Pain Diagram — mark areas of pain</div>
+      <div class="bodywrap">
+        ${bodyChart()}
+        <div class="painlist">
+          <div class="hint" style="margin-bottom:8px">Click body areas to mark pain; adjust intensity/type on the right.</div>
+          <div id="painItems"></div>
+        </div>
+      </div>
+      <div class="legend"><span><i class="dot" style="background:#cbd5e1"></i> No pain</span><span><i class="dot" style="background:#ef4444"></i> Marked pain</span></div>
+
+      <div class="sec-title">Medical History</div>
+      <div class="grid">
+        <div class="field full">${inpRaw("medicalHistory","Past medical / surgical history, conditions",p.medicalHistory)}</div>
+        <div class="field full">${inpRaw("medications","Current Medications",p.medications)}</div>
+        <div class="field full">${inpRaw("allergies","Allergies",p.allergies)}</div>
+        <div class="field full">${inpRaw("priorTreatment","Prior treatment for this complaint",p.priorTreatment)}</div>
+      </div>
+
+      <div class="sec-title">Lifestyle & Consent</div>
+      <div class="grid three">
+        ${sel("smoker","Smoker",["","No","Yes","Former"],p.smoker)}
+        ${sel("exercise","Exercise Level",["","Sedentary","Light","Moderate","Active"],p.exercise)}
+        ${inp("pregnant","Pregnant (if applicable)",p.pregnant)}
+      </div>
+      <label style="display:flex;gap:8px;align-items:center;margin-top:12px;font-size:14px">
+        <input type="checkbox" id="f_consent" ${p.consent?"checked":""}/> Patient consents to chiropractic evaluation and treatment.</label>
+
+      <div class="row-actions no-print" style="justify-content:flex-end;margin-top:20px">
+        <button class="btn" onclick="editingPatientId=null;go('patients')">Cancel</button>
+        <button class="btn" onclick="window.print()">Generate PDF / Print Intake</button>
+        <button class="btn primary" onclick="saveIntake()">${editingPatientId?"Save Changes":"Save & Create Patient"}</button>
+      </div>
+    </div>`;
+  renderPainItems();
+};
+function editPatient(id){ editingPatientId=id; go("intake"); }
+function setPain(n){ $("#f_painLevel").value=n; document.querySelectorAll("#painScale button").forEach((b,i)=>b.classList.toggle("on",i===n)); }
+function inpRaw(id,label,val,type){ return `<label>${label}</label>${type==='ta'?'':''}<input id="f_${id}" type="${type||'text'}" value="${esc(val||'')}"/>`; }
+function inp(id,label,val,type){ return `<div class="field"><label>${label}</label><input id="f_${id}" type="${type||'text'}" value="${esc(val||'')}"/></div>`; }
+function sel(id,label,opts,val){ return `<div class="field"><label>${label}</label><select id="f_${id}">${opts.map(o=>`<option ${o===val?'selected':''}>${o}</option>`).join("")}</select></div>`; }
+function dateField(id,label,val,start,end){ return `<div class="field"><label>${label}</label>${dateControl("f_"+id,val,start,end)}</div>`; }
+function dateControl(id,val,start,end){
+  return `<div class="date-combo"><input id="${id}" type="date" value="${esc(val||"")}"/><button type="button" title="Previous year" onclick="changeDateYear('${id}',-1,${start},${end})">&lsaquo;</button><button type="button" title="Next year" onclick="changeDateYear('${id}',1,${start},${end})">&rsaquo;</button></div>`;
+}
+function changeDateYear(id,delta,start,end){
+  const e=$("#"+id); if(!e) return;
+  const base = e.value || todayISO();
+  const y = Math.min(end, Math.max(start, (Number(base.slice(0,4))||new Date().getFullYear()) + delta));
+  e.value = y + base.slice(4);
+  const sel = e.parentElement.querySelector("select"); if(sel) sel.value = y;
+}
+function fv(id){ const e=$("#f_"+id); return e?e.value.trim():""; }
+function saveIntake(){
+  if(!fv("first") && !fv("last")){ toast("Please enter a name"); return; }
+  const data = {};
+  ["first","last","dob","sex","phone","email","occupation","address","insurance","policy","group",
+   "emergencyName","emergencyRel","emergencyPhone","chiefComplaint","painOnset","painType","painFreq",
+   "medicalHistory","medications","allergies","priorTreatment","smoker","exercise","pregnant"].forEach(k=>data[k]=fv(k));
+  data.painLevel = $("#f_painLevel").value;
+  data.consent = $("#f_consent").checked;
+  data.pain = JSON.parse(JSON.stringify(intakePain));
+  if(editingPatientId){ Object.assign(patientById(editingPatientId),data); toast("Patient updated"); }
+  else { data.id=uid(); data.created=todayISO(); DB.patients.push(data); toast("Patient created"); }
+  save(); editingPatientId=null; go("patients");
+}
+
+/* ============================ SOAP NOTES + BODY DIAGRAM ============================ */
+const BODY_REGIONS = ["Head","Neck","L Shoulder","R Shoulder","Upper Back","Mid Back","Lower Back",
+  "L Elbow","R Elbow","L Wrist/Hand","R Wrist/Hand","L Hip","R Hip","Sacrum/Tailbone",
+  "L Knee","R Knee","L Ankle/Foot","R Ankle/Foot","Chest","Abdomen"];
+const SOAP_SERVICES = [
+  {code:"SMT", name:"Spinal Manipulative Therapy"},
+  {code:"STT", name:"Soft Tissue Therapy"},
+  {code:"IFC", name:"Interferential Current Therapy"},
+  {code:"Laser", name:"Laser Therapy"},
+];
+let visitDraft = null;
+let intakePain = {};        // editable pain store for the intake form
+let activePain = {};        // pointer to whichever pain object the diagram currently edits
+
+function newVisit(patientId){
+  if(!DB.patients.length){ toast("Add a patient first"); go("intake"); return; }
+  visitDraft = { id:uid(), patientId:patientId||DB.patients[0].id, date:todayISO(),
+    subjective:"", objective:"", assessment:"", plan:"", pain:{}, services:[] };
+  visitEditor();
+}
+function openVisit(id){ visitDraft = JSON.parse(JSON.stringify(DB.visits.find(v=>v.id===id))); visitEditor(); }
+function soapServiceSummary(v){ return (v.services||[]).join(", "); }
+function soapServiceChecks(v){
+  const selected = new Set(v.services||[]);
+  return `<div class="row-actions">${SOAP_SERVICES.map(s=>`<label class="btn sm" style="display:flex;align-items:center;gap:6px">
+    <input type="checkbox" name="soap_service" value="${esc(s.code)}" ${selected.has(s.code)?'checked':''}/> <b>${esc(s.code)}</b> ${esc(s.name)}
+  </label>`).join("")}</div>`;
+}
+function readSoapServices(){ return Array.from(document.querySelectorAll('input[name="soap_service"]:checked')).map(x=>x.value); }
+
+function visitEditor(replace){
+  const v = visitDraft;
+  const p = patientById(v.patientId);
+  const c = DB.clinic;
+  activePain = visitDraft.pain;
+  openModal(`
+    <div class="modal-head"><h3>SOAP Note</h3><button class="x" onclick="closeModal()">&times;</button></div>
+    <div class="print-area">
+      <div class="clinical-doc print-only">
+        ${letterhead("SOAP Note", [["Patient",fullName(p)],["Visit Date",v.date||todayISO()]])}
+        <div class="clinical-patient">
+          <div><div class="hint">Patient</div><b>${esc(fullName(p))}</b></div>
+          <div><div class="hint">DOB</div>${esc(p?.dob||"—")}</div>
+          <div><div class="hint">Phone</div>${esc(p?.phone||"—")}</div>
+          <div><div class="hint">Email</div>${emailView(p?.email)}</div>
+        </div>
+      </div>
+      <div class="grid three no-print" style="margin-bottom:6px">
+        <div class="field"><label>Patient</label><div style="display:flex;gap:6px"><select id="v_patient" style="flex:1">${DB.patients.map(p=>`<option value="${p.id}" ${p.id===v.patientId?'selected':''}>${esc(fullName(p))}</option>`).join("")}</select><button type="button" class="btn" title="Open patient phone book" onclick="openPatientPicker('v_patient')">&#128199;</button></div></div>
+        <div class="field"><label>Visit Date</label>${dateControl("v_date",v.date,2020,new Date().getFullYear()+5)}</div>
+      </div>
+      <div class="sec-title">Pain Diagram — check the areas of pain</div>
+      <div class="bodywrap">
+        ${bodyChart()}
+        <div class="painlist">
+          <div class="hint" style="margin-bottom:8px">Click body areas to mark pain; adjust intensity/type on the right.</div>
+          <div id="painItems"></div>
+        </div>
+      </div>
+      <div class="legend"><span><i class="dot" style="background:#cbd5e1"></i> No pain</span><span><i class="dot" style="background:#ef4444"></i> Marked pain</span></div>
+
+      <div class="sec-title">SOAP</div>
+      <div class="field full no-print"><label>S — Subjective (patient report)</label><textarea id="v_subjective">${esc(v.subjective)}</textarea></div>
+      <div class="field full no-print" style="margin-top:12px"><label>O — Objective (exam findings, ROM, palpation, tests)</label><textarea id="v_objective">${esc(v.objective)}</textarea></div>
+      <div class="field full no-print" style="margin-top:12px"><label>A — Assessment (diagnosis)</label><textarea id="v_assessment">${esc(v.assessment)}</textarea></div>
+      <div class="sec-title no-print">Services Provided</div>
+      <div class="no-print">${soapServiceChecks(v)}</div>
+      <div class="field full no-print" style="margin-top:12px"><label>P — Plan (treatment, adjustments, home care, follow-up)</label><textarea id="v_plan">${esc(v.plan)}</textarea></div>
+      <div class="clinical-doc print-only">
+        <div class="clinical-section"><h4>S — Subjective</h4><div class="clinical-box">${esc(v.subjective||"")}</div></div>
+        <div class="clinical-section"><h4>O — Objective</h4><div class="clinical-box">${esc(v.objective||"")}</div></div>
+        <div class="clinical-section"><h4>A — Assessment</h4><div class="clinical-box">${esc(v.assessment||"")}</div></div>
+        <div class="clinical-section"><h4>Services Provided</h4><div class="clinical-box">${esc(soapServiceSummary(v)||"")}</div></div>
+        <div class="clinical-section"><h4>P — Plan</h4><div class="clinical-box">${esc(v.plan||"")}</div></div>
+        <div class="clinical-sign">
+          ${c.signature?`<img src="${esc(c.signature)}" alt="Doctor signature"/>`:`<div style="height:64px"></div>`}
+          <div class="line">Provider Signature — ${esc(c.provider||"Dr. Ardeshir Ekhtiari, DC")}</div>
+        </div>
+        <div class="print-footer">${esc(c.name||"Posture Clinic")} · Printed ${new Date().toLocaleDateString()} · </div>
+      </div>
+    </div>
+    <div class="modal-foot no-print">
+      ${DB.visits.find(x=>x.id===v.id)?`<button class="btn danger" onclick="deleteVisit('${v.id}')">Delete</button>`:''}
+      <button class="btn" onclick="closeModal()">Cancel</button>
+      <button class="btn" onclick="printVisit()">Generate PDF / Print Formal SOAP</button>
+      <button class="btn primary" onclick="saveVisit()">Save Note</button>
+    </div>`, true, replace);
+  renderPainItems();
+}
+
+/* Clinical body chart: the real reference image (uploaded → DB.clinic.bodyChart, or a
+   relative body-chart.png beside the app) shown under transparent clickable region overlays.
+   Coordinates are % of the image box, tuned for a combined Front (left) + Back (right) chart. */
+const BODYCHART_HOTSPOTS = [
+  // ---- FRONT figure in the clinical chart (viewer-left = patient Right) ----
+  {label:'Head',            x:26.8, y:12.0, w:10.0, h:12.0},
+  {label:'Neck',            x:26.8, y:19.0, w:7.0,  h:5.5},
+  {label:'R Shoulder',      x:15.5, y:24.5, w:10.0, h:8.5},
+  {label:'L Shoulder',      x:38.0, y:24.5, w:10.0, h:8.5},
+  {label:'Chest',           x:26.8, y:31.0, w:22.0, h:11.0},
+  {label:'Abdomen',         x:26.8, y:42.5, w:16.0, h:13.0},
+  {label:'R Elbow',         x:12.3, y:40.0, w:7.5,  h:8.0},
+  {label:'L Elbow',         x:41.8, y:40.0, w:7.5,  h:8.0},
+  {label:'R Hip',           x:22.0, y:52.0, w:8.0,  h:7.0},
+  {label:'L Hip',           x:31.6, y:52.0, w:8.0,  h:7.0},
+  {label:'R Wrist/Hand',    x:8.8,  y:56.5, w:10.5, h:12.0},
+  {label:'L Wrist/Hand',    x:45.3, y:56.5, w:10.5, h:12.0},
+  {label:'R Knee',          x:23.0, y:70.0, w:7.5,  h:8.0},
+  {label:'L Knee',          x:31.2, y:70.0, w:7.5,  h:8.0},
+  {label:'R Ankle/Foot',    x:23.2, y:91.8, w:8.5,  h:8.0},
+  {label:'L Ankle/Foot',    x:31.7, y:91.8, w:8.5,  h:8.0},
+  // ---- BACK figure in the clinical chart (viewer-left = patient Left) ----
+  {label:'Head',            x:74.0, y:12.0, w:10.0, h:12.0},
+  {label:'Neck',            x:74.0, y:19.0, w:7.0,  h:5.5},
+  {label:'L Shoulder',      x:63.8, y:24.5, w:10.0, h:8.5},
+  {label:'R Shoulder',      x:86.2, y:24.5, w:10.0, h:8.5},
+  {label:'Upper Back',      x:74.5, y:29.0, w:22.0, h:12.0},
+  {label:'Mid Back',        x:74.5, y:39.5, w:18.5, h:11.0},
+  {label:'Lower Back',      x:74.5, y:49.0, w:17.0, h:8.0},
+  {label:'Sacrum/Tailbone', x:74.5, y:54.0, w:8.5,  h:5.5},
+  {label:'L Elbow',         x:60.0, y:40.0, w:7.5,  h:8.0},
+  {label:'R Elbow',         x:88.7, y:40.0, w:7.5,  h:8.0},
+  {label:'L Hip',           x:69.2, y:54.0, w:8.0,  h:7.0},
+  {label:'R Hip',           x:79.5, y:54.0, w:8.0,  h:7.0},
+  {label:'L Wrist/Hand',    x:57.0, y:56.5, w:10.5, h:12.0},
+  {label:'R Wrist/Hand',    x:92.0, y:56.5, w:10.5, h:12.0},
+  {label:'L Knee',          x:70.7, y:70.0, w:7.5,  h:8.0},
+  {label:'R Knee',          x:78.6, y:70.0, w:7.5,  h:8.0},
+  {label:'L Ankle/Foot',    x:70.8, y:92.0, w:8.5,  h:8.0},
+  {label:'R Ankle/Foot',    x:79.0, y:92.0, w:8.5,  h:8.0},
+];
+const DEFAULT_BODY_CHART_SRC = "file:///C:/Users/vagha/.cursor/projects/d-Cursor/assets/c__Users_vagha_AppData_Roaming_Cursor_User_workspaceStorage_58e34e9610e7aa9d59d216923b20fe2c_images_image-a7ae1b65-df9c-4d90-8eb4-67a06b1fe8f6.png";
+function bodyChart(){
+  const src = DB.clinic.bodyChart || "body-chart.png";
+  const spots = BODYCHART_HOTSPOTS.map(s=>
+    `<button type="button" class="hot ${activePain[s.label]?'marked':''}" data-region="${s.label}" title="${esc(s.label)}"
+       style="left:${s.x}%;top:${s.y}%;width:${s.w}%;height:${s.h}%" onclick="togglePain('${cssq(s.label)}')"></button>`
+  ).join("");
+  return `<div class="bodychart" id="bodyChartBox">
+    <img src="${esc(src)}" alt="Front and back clinical body chart" draggable="false" onerror="bodyChartFallback(this)"/>
+    <div class="chartmsg no-print" id="chartMsg" style="display:none"></div>
+    ${spots}
+  </div>`;
+}
+function bodyChartFallback(img){
+  if(!DB.clinic.bodyChart && !img.dataset.triedDefault){
+    img.dataset.triedDefault = "1";
+    img.src = DEFAULT_BODY_CHART_SRC;
+    return;
+  }
+  bodyChartMissing();
+}
+function bodyChartMissing(){
+  const box=$("#bodyChartBox"), msg=$("#chartMsg"); if(!box||!msg) return;
+  box.classList.add("noimg");
+  const img=box.querySelector("img"); if(img) img.style.display="none";
+  msg.style.display="flex";
+  msg.innerHTML=`No body chart image found.<br>Go to <b>Settings &rsaquo; Branding</b> and upload the clinical body chart image, or place <code>body-chart.png</code> next to this file.`;
+}
+function togglePain(label){
+  if(activePain[label]) delete activePain[label];
+  else activePain[label] = { intensity:5, type:"" };
+  // sync marked state across all region overlays (front + back share region keys)
+  document.querySelectorAll('.hot').forEach(g=>{ const l=g.getAttribute('data-region'); g.classList.toggle('marked',!!activePain[l]); });
+  renderPainItems();
+}
+function cssq(s){ return s.replace(/"/g,'\\"'); }
+function renderPainItems(){
+  const box = $("#painItems"); if(!box) return;
+  box.innerHTML = `<div class="hint" style="margin-bottom:8px">Click a body-part name or checkbox to mark it on the diagram.</div>` +
+    BODY_REGIONS.map(k=>{
+      const p = activePain[k], on = !!p;
+      return `<div class="painitem ${on?'selected':''}">
+        <input type="checkbox" ${on?'checked':''} onchange="togglePain('${cssq(k)}')"/>
+        <span class="nm clickable" onclick="togglePain('${cssq(k)}')">${esc(k)}</span>
+        ${on?`<label class="hint">Intensity</label>
+          <select onchange="activePain['${cssq(k)}'].intensity=this.value">${[0,1,2,3,4,5,6,7,8,9,10].map(n=>`<option ${String(p.intensity)==String(n)?'selected':''}>${n}</option>`).join("")}</select>
+          <select onchange="activePain['${cssq(k)}'].type=this.value">${["","Sharp","Dull","Burning","Aching","Throbbing","Tingling","Numb","Stiff"].map(t=>`<option ${p.type===t?'selected':''}>${t||'type'}</option>`).join("")}</select>`:`<span class="muted">No pain</span>`}
+      </div>`;
+    }).join("");
+}
+function captureVisitForm(){
+  if(!$("#v_patient")) return;
+  visitDraft.patientId = $("#v_patient").value;
+  visitDraft.date = $("#v_date").value || todayISO();
+  visitDraft.subjective = $("#v_subjective").value;
+  visitDraft.objective = $("#v_objective").value;
+  visitDraft.assessment = $("#v_assessment").value;
+  visitDraft.services = readSoapServices();
+  visitDraft.plan = $("#v_plan").value;
+}
+function printVisit(){
+  captureVisitForm();
+  visitEditor(true);
+  setTimeout(printModal,100);
+}
+function saveVisit(){
+  captureVisitForm();
+  const i = DB.visits.findIndex(v=>v.id===visitDraft.id);
+  if(i>=0) DB.visits[i]=visitDraft; else DB.visits.push(visitDraft);
+  save(); closeModal(); toast("SOAP note saved");
+  if(current==="visits") views.visits(); else if(current==="dashboard") views.dashboard();
+}
+function deleteVisit(id){ if(!confirm("Delete this note?"))return; DB.visits=DB.visits.filter(v=>v.id!==id); save(); closeModal(); toast("Note deleted"); if(current==="visits")views.visits(); }
+
+views.visits = function(){
+  content.innerHTML = `<div class="panel">
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px"><h3 style="margin:0">SOAP Notes</h3>
+      <input id="visitSearch" class="btn" style="margin-left:auto;width:300px" placeholder="Search patient, date, assessment..." oninput="renderVisitTable(this.value)"/>
+      <button class="btn primary" onclick="newVisit()">+ New SOAP Note</button></div>
+    <div id="visitTable"></div></div>`;
+  renderVisitTable("");
+};
+function renderVisitTable(q){
+  const list = DB.visits.filter(v=>matchesText(q,fullName(patientById(v.patientId)),v.date,v.subjective,v.objective,v.assessment,v.plan,painSummary(v.pain),soapServiceSummary(v)))
+    .sort((a,b)=>b.date.localeCompare(a.date));
+  const el=$("#visitTable"); if(!el) return;
+  el.innerHTML = list.length? `<table><thead><tr><th>Date</th><th>Patient</th><th>Services</th><th>Areas of Pain</th><th>Assessment</th><th></th></tr></thead>
+    <tbody>${list.map(v=>`<tr><td>${v.date}</td><td>${esc(fullName(patientById(v.patientId)))}</td>
+      <td>${esc(soapServiceSummary(v)||"—")}</td>
+      <td>${Object.keys(v.pain||{}).length? `<span class="tag blue">${Object.keys(v.pain).length} area(s)</span>`:'<span class="muted">—</span>'}</td>
+      <td>${esc((v.assessment||"").slice(0,40))}</td>
+      <td style="text-align:right"><button class="btn sm" onclick="openVisit('${v.id}')">Open</button></td></tr>`).join("")}</tbody></table>`
+    : `<div class="empty">No matching SOAP notes.</div>`;
+}
+
+/* ============================ INVOICES ============================ */
+let invDraft = null;
+function nextInvoiceNumber(){
+  let n;
+  do { n = "INV-" + Math.floor(100000 + Math.random()*900000); }
+  while(DB.invoices.some(i=>i.number===n));
+  return n;
+}
+function newInvoice(patientId){
+  if(!DB.patients.length){ toast("Add a patient first"); go("intake"); return; }
+  const num = nextInvoiceNumber();
+  invDraft = { id:uid(), number:num, patientId:patientId||DB.patients[0].id, date:todayISO(),
+    items:[{desc:DB.clinic.services[0].desc, code:DB.clinic.services[0].code, qty:1, price:DB.clinic.services[0].price}],
+    discount:0, taxRate:DB.clinic.taxRate, paidAmount:0, payments:[], status:"Unpaid", notes:"" };
+  invoiceEditor();
+}
+function openInvoice(id){ invDraft = JSON.parse(JSON.stringify(DB.invoices.find(i=>i.id===id))); invoiceEditor(); }
+function invTotals(v){
+  const sub = v.items.reduce((s,it)=>s+(Number(it.qty)||0)*(Number(it.price)||0),0);
+  const disc = Number(v.discount)||0;
+  const tax = (sub-disc)*(Number(v.taxRate)||0)/100;
+  const total = sub-disc+tax;
+  const paid = paymentTotal(v);
+  return { sub, disc, tax, total, paid, balance: Math.max(0,total-paid) };
+}
+function paymentTotal(v){
+  const history = (v.payments||[]).reduce((s,p)=>s+(Number(p.amount)||0),0);
+  return Math.max(0, history + (Number(v.paidAmount)||0));
+}
+function invoiceEditor(replace){
+  const v = invDraft; const c = DB.clinic; const t = invTotals(v);
+  const bp = patientById(v.patientId);
+  openModal(`
+    <div class="modal-head"><h3>Invoice ${esc(v.number)}</h3><button class="x" onclick="closeModal()">&times;</button></div>
+    <div class="print-area">
+      <div class="print-only">${letterhead("Invoice", [["Invoice #",v.number],["Invoice Date",v.date],["Patient",fullName(bp)]])}</div>
+      <div class="no-print" style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:8px">
+        <div style="display:flex;align-items:flex-start;gap:12px">
+          ${c.logo?`<img src="${esc(c.logo)}" alt="Clinic logo" style="max-height:70px;max-width:180px;object-fit:contain"/>`:""}
+          <div><div style="font-size:20px;font-weight:700;color:var(--brand-dark)">${esc(c.name)}</div>
+          <div class="muted">${esc(c.provider)}</div><div class="muted">${esc(c.address||"")}</div>
+          <div class="muted">${esc(c.phone||"")} ${esc(c.email||"")}</div></div></div>
+        <div style="text-align:right"><div class="no-print"><b>Invoice #:</b> <input id="i_number" style="width:130px" value="${esc(v.number)}" oninput="invDraft.number=this.value"/></div>
+          <div class="print-only" style="display:none"><b>Invoice #:</b> ${esc(v.number)}</div>
+          <div class="no-print"><b>Date:</b> ${dateControl("i_date",v.date,2020,new Date().getFullYear()+5)}</div>
+          <div class="print-only" style="display:none"><b>Date:</b> ${v.date}</div>
+          <div class="no-print" style="margin-top:6px"><b>Patient:</b> <select id="i_patient" onchange="invDraft.patientId=this.value;invoiceEditor(true)">${DB.patients.map(p=>`<option value="${p.id}" ${p.id===v.patientId?'selected':''}>${esc(fullName(p))}</option>`).join("")}</select> <button type="button" class="btn sm" title="Open patient phone book" onclick="openPatientPicker('i_patient')">&#128199;</button></div>
+        </div>
+      </div>
+      <div style="margin:28px 0 18px;line-height:1.65">
+        <div><b>Patient Name:</b> ${esc(fullName(bp))}</div>
+        <div><b>Address:</b> ${esc(bp?.address||"—")}</div>
+        <div><b>Phone:</b> ${esc(bp?.phone||"—")}</div>
+      </div>
+      <table class="inv-items"><thead><tr><th>Code</th><th>Description</th><th style="width:70px">Qty</th><th style="width:110px">Price</th><th style="width:110px">Amount</th><th class="no-print"></th></tr></thead>
+        <tbody id="invRows"></tbody></table>
+      <button class="btn sm no-print" style="margin-top:8px" onclick="addInvRow()">+ Add line</button>
+      <div class="no-print" style="margin-top:8px">
+        <div class="hint" style="margin-bottom:6px">Quick add common billing codes:</div>
+        <div class="row-actions">${c.services.map((s,i)=>`<button class="btn sm" title="${esc(s.desc)} — ${money(s.price)}" onclick="addService(${i})"><b>${esc(s.code||"Code")}</b> — ${esc(s.desc||"Service")} (${money(s.price)})</button>`).join("")}</div>
+      </div>
+      <div class="inv-total"><table>
+        <tr><td>Subtotal</td><td style="text-align:right">${money(t.sub)}</td></tr>
+        <tr><td>Discount <input class="no-print" style="width:70px" id="i_discount" type="number" value="${v.discount}" oninput="invDraft.discount=this.value;invoiceEditor(true)"/></td><td style="text-align:right">-${money(t.disc)}</td></tr>
+        <tr><td>Tax <input class="no-print" style="width:60px" id="i_tax" type="number" value="${v.taxRate}" oninput="invDraft.taxRate=this.value;invoiceEditor(true)"/>%</td><td style="text-align:right">${money(t.tax)}</td></tr>
+        <tr class="grand"><td>Total</td><td style="text-align:right">${money(t.total)}</td></tr>
+        <tr><td>Amount Paid</td><td style="text-align:right">-${money(t.paid)}</td></tr>
+        <tr class="grand"><td>Outstanding Balance</td><td style="text-align:right">${money(t.balance)}</td></tr>
+      </table></div>
+      <div class="panel no-print" style="margin-top:16px;padding:14px">
+        <h3 style="margin:0 0 10px">Payment History</h3>
+        ${paymentRows()}
+        <div class="grid three" style="align-items:end;margin-top:10px">
+          <div class="field"><label>Payment Date</label>${dateControl("pay_date",todayISO(),2020,new Date().getFullYear()+5)}</div>
+          <div class="field"><label>Amount Paid</label><input id="pay_amount" type="number" min="0" step="0.01" placeholder="0.00"/></div>
+          <div class="field"><label>Note / Method</label><input id="pay_note" placeholder="cash, card, cheque..."/></div>
+        </div>
+        <button class="btn primary sm" style="margin-top:10px" onclick="addPayment()">+ Add Payment</button>
+      </div>
+      <div class="field full" style="margin-top:12px"><label>Notes</label><textarea id="i_notes">${esc(v.notes)}</textarea></div>
+      <div style="margin-top:32px;display:flex;justify-content:flex-end">
+        <div style="min-width:280px;text-align:center">
+          ${c.signature?`<img src="${esc(c.signature)}" alt="Provider signature" style="max-height:60px;max-width:260px;object-fit:contain;display:block;margin:0 auto 4px"/>`:`<div style="height:60px"></div>`}
+          <div style="border-top:1px solid var(--text);padding-top:6px;font-size:13px">Provider Signature — ${esc(c.provider||"")}</div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-foot no-print">
+      ${DB.invoices.find(x=>x.id===v.id)?`<button class="btn danger" onclick="deleteInvoice('${v.id}')">Delete</button>`:''}
+      <button class="btn" onclick="closeModal()">Cancel</button>
+      <select id="i_status" onchange="invDraft.status=this.value">${["Unpaid","Paid","Partial"].map(s=>`<option ${v.status===s?'selected':''}>${s}</option>`).join("")}</select>
+      <button class="btn" onclick="printInvoice()">Generate PDF / Print Invoice</button>
+      <button class="btn primary" onclick="saveInvoice()">Save Invoice</button>
+    </div>`, true, replace);
+  renderInvRows();
+}
+function renderInvRows(){
+  const box=$("#invRows"); if(!box)return;
+  box.innerHTML = invDraft.items.map((it,i)=>`<tr>
+    <td><input style="width:80px" value="${esc(it.code||'')}" oninput="invDraft.items[${i}].code=this.value"/></td>
+    <td><input style="width:100%" value="${esc(it.desc||'')}" oninput="invDraft.items[${i}].desc=this.value"/></td>
+    <td><input type="number" style="width:60px" value="${it.qty}" oninput="invDraft.items[${i}].qty=this.value;updateAmounts()"/></td>
+    <td><input type="number" style="width:100px" value="${it.price}" oninput="invDraft.items[${i}].price=this.value;updateAmounts()"/></td>
+    <td class="amt">${money((it.qty||0)*(it.price||0))}</td>
+    <td class="no-print"><button class="btn sm danger" onclick="invDraft.items.splice(${i},1);invoiceEditor(true)">&times;</button></td></tr>`).join("");
+}
+function updateAmounts(){ invoiceEditor(true); }
+function addInvRow(){ invDraft.items.push({desc:"",code:"",qty:1,price:0}); invoiceEditor(true); }
+function addService(i){ const s=DB.clinic.services[i]; invDraft.items.push({desc:s.desc,code:s.code,qty:1,price:s.price}); invoiceEditor(true); }
+function paymentRows(){
+  const rows = invDraft.payments || [];
+  const legacy = Number(invDraft.paidAmount)||0;
+  const legacyRow = legacy ? `<tr><td>Previous balance payment</td><td>${money(legacy)}</td><td>Recorded before payment history</td><td></td></tr>` : "";
+  return rows.length || legacy ? `<table><thead><tr><th>Date</th><th>Amount</th><th>Note / Method</th><th></th></tr></thead>
+    <tbody>${legacyRow}${rows.map(p=>`<tr><td>${esc(p.date||"")}</td><td>${money(p.amount)}</td><td>${esc(p.note||"")}</td>
+      <td style="text-align:right"><button class="btn sm danger" onclick="deletePayment('${p.id}')">Remove</button></td></tr>`).join("")}</tbody></table>`
+    : `<div class="muted">No payments recorded yet.</div>`;
+}
+function addPayment(){
+  captureInvoiceForm();
+  const amount = Number($("#pay_amount")?.value)||0;
+  if(amount<=0){ toast("Enter a payment amount"); return; }
+  invDraft.payments = invDraft.payments || [];
+  invDraft.payments.push({id:uid(),date:$("#pay_date")?.value||todayISO(),amount,note:$("#pay_note")?.value||""});
+  const bal=invTotals(invDraft).balance;
+  invDraft.status = bal<=0 ? "Paid" : "Partial";
+  const i=DB.invoices.findIndex(x=>x.id===invDraft.id);
+  if(i>=0){ DB.invoices[i]=JSON.parse(JSON.stringify(invDraft)); save(); toast("Payment recorded"); }
+  invoiceEditor(true);
+}
+function deletePayment(id){
+  captureInvoiceForm();
+  invDraft.payments = (invDraft.payments||[]).filter(p=>p.id!==id);
+  const bal=invTotals(invDraft).balance;
+  invDraft.status = bal<=0 ? "Paid" : (invTotals(invDraft).paid>0 ? "Partial" : "Unpaid");
+  const i=DB.invoices.findIndex(x=>x.id===invDraft.id);
+  if(i>=0){ DB.invoices[i]=JSON.parse(JSON.stringify(invDraft)); save(); toast("Payment removed"); }
+  invoiceEditor(true);
+}
+function captureInvoiceForm(){
+  if(!$("#i_patient")) return;
+  invDraft.number=($("#i_number")?.value||invDraft.number).trim()||nextInvoiceNumber();
+  invDraft.patientId=$("#i_patient").value; invDraft.date=$("#i_date").value||todayISO();
+  invDraft.notes=$("#i_notes").value; invDraft.status=$("#i_status").value;
+  invDraft.total=invTotals(invDraft).total;
+  const bal=invTotals(invDraft).balance;
+  invDraft.status = bal<=0 ? "Paid" : (invTotals(invDraft).paid>0 ? "Partial" : "Unpaid");
+}
+function printInvoice(){
+  captureInvoiceForm();
+  invoiceEditor(true);
+  setTimeout(printModal,100);
+}
+function saveInvoice(){
+  captureInvoiceForm();
+  const i=DB.invoices.findIndex(x=>x.id===invDraft.id);
+  if(i>=0)DB.invoices[i]=invDraft; else DB.invoices.push(invDraft);
+  save(); closeModal(); toast("Invoice saved"); if(current==="invoices")views.invoices(); else if(current==="dashboard")views.dashboard();
+}
+function deleteInvoice(id){ if(!confirm("Delete invoice?"))return; DB.invoices=DB.invoices.filter(i=>i.id!==id); save(); closeModal(); toast("Invoice deleted"); if(current==="invoices")views.invoices(); }
+views.invoices = function(){
+  content.innerHTML=`<div class="panel">
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px"><h3 style="margin:0">Invoices</h3>
+      <input id="invoiceSearch" class="btn" style="margin-left:auto;width:300px" placeholder="Search invoice, patient, status..." oninput="renderInvoiceTable(this.value)"/>
+      <button class="btn primary" onclick="newInvoice()">+ New Invoice</button></div>
+    <div id="invoiceTable"></div></div>`;
+  renderInvoiceTable("");
+};
+function renderInvoiceTable(q){
+  const list=DB.invoices.filter(i=>{ const t=invTotals(i); return matchesText(q,i.number,i.date,fullName(patientById(i.patientId)),i.status,itemsSummary(i.items),t.total,t.paid,t.balance,i.notes); })
+    .sort((a,b)=>b.date.localeCompare(a.date));
+  const el=$("#invoiceTable"); if(!el) return;
+  el.innerHTML = list.length?`<table><thead><tr><th>Invoice #</th><th>Date</th><th>Patient</th><th>Total</th><th>Paid</th><th>Outstanding</th><th>Status</th><th></th></tr></thead>
+    <tbody>${list.map(i=>{ const t=invTotals(i); return `<tr><td>${esc(i.number)}</td><td>${i.date}</td><td>${esc(fullName(patientById(i.patientId)))}</td>
+      <td>${money(t.total)}</td><td>${money(t.paid)}</td><td><b>${money(t.balance)}</b></td><td><span class="tag ${i.status==='Paid'?'green':(i.status==='Partial'?'amber':'blue')}">${i.status}</span></td>
+      <td style="text-align:right"><button class="btn sm" onclick="openInvoice('${i.id}')">Open</button></td></tr>`; }).join("")}</tbody></table>`
+    :`<div class="empty">No matching invoices.</div>`;
+}
+
+/* ============================ APPOINTMENTS ============================ */
+let calView = "week", calDate = todayISO();
+let editingApptId = null;
+views.appointments = function(){
+  const ap = editingApptId ? DB.appointments.find(a=>a.id===editingApptId) : {};
+  content.innerHTML=`<div class="panel">
+    <h3>${editingApptId?"Edit Appointment":"Schedule Appointment"}</h3>
+    <div class="grid four" style="align-items:end">
+      <div class="field"><label>Patient</label><div style="display:flex;gap:6px"><select id="a_patient" style="flex:1">${DB.patients.map(p=>`<option value="${p.id}" ${p.id===ap?.patientId?'selected':''}>${esc(fullName(p))}</option>`).join("")}</select><button type="button" class="btn" title="Open patient phone book" onclick="openPatientPicker('a_patient')">&#128199;</button></div></div>
+      <div class="field"><label>Date</label>${dateControl("a_date",ap?.date||todayISO(),2020,new Date().getFullYear()+5)}</div>
+      <div class="field"><label>Time</label><div style="display:flex;gap:6px"><input id="a_time" placeholder="HH:MM" pattern="[0-2][0-9]:[0-5][0-9]" style="flex:1" value="${esc(ap?.time||"")}"/>${timeQuickSelect()}<button type="button" class="btn sm" onclick="setNowTime()">Now</button></div></div>
+      <div class="field"><label>Reason</label><input id="a_reason" value="${esc(ap?.reason||"")}"/></div>
+    </div>
+    <div class="row-actions" style="margin-top:12px">
+      <button class="btn primary" onclick="addAppt()">${editingApptId?"Save Changes":"Save Appointment"}</button>
+      ${editingApptId?`<button class="btn" onclick="editingApptId=null;views.appointments()">Cancel Edit</button>`:""}
+      <button class="btn" onclick="go('calendar')">Open Calendar</button>
+    </div>
+  </div>
+  <div class="panel">
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px"><h3 style="margin:0">Appointments</h3>
+      <input id="appointmentSearch" class="btn" style="margin-left:auto;width:300px" placeholder="Search patient, date, reason..." oninput="renderAppointmentTable(this.value)"/>
+    </div>
+    <div id="appointmentTable"></div></div>`;
+  renderAppointmentTable("");
+};
+function addAppt(){ if(!DB.patients.length){toast("Add a patient first");return;}
+  const time = normalizeTime30($("#a_time").value);
+  if(!time){ toast("Enter an appointment time"); return; }
+  const data={id:editingApptId||uid(),patientId:$("#a_patient").value,date:$("#a_date").value,time,reason:$("#a_reason").value};
+  const i=DB.appointments.findIndex(a=>a.id===editingApptId);
+  if(i>=0){ DB.appointments[i]=data; toast("Appointment updated"); }
+  else { DB.appointments.push(data); toast("Appointment added"); }
+  editingApptId=null; save(); views.appointments(); }
+function editAppt(id){ editingApptId=id; go("appointments"); }
+function delAppt(id){ DB.appointments=DB.appointments.filter(a=>a.id!==id); if(editingApptId===id) editingApptId=null; save(); views.appointments(); }
+function renderAppointmentTable(q){
+  const list=DB.appointments.filter(a=>matchesText(q,a.date,a.time,fullName(patientById(a.patientId)),a.reason))
+    .sort((a,b)=>(a.date+a.time).localeCompare(b.date+b.time));
+  const el=$("#appointmentTable"); if(!el) return;
+  el.innerHTML = list.length?`<table><thead><tr><th>Date</th><th>Time</th><th>Patient</th><th>Reason</th><th></th></tr></thead>
+    <tbody>${list.map(a=>`<tr><td>${a.date}</td><td>${esc(a.time)} - ${esc(add30(a.time))}</td><td>${esc(fullName(patientById(a.patientId)))}</td><td>${esc(a.reason)}</td>
+      <td style="text-align:right"><button class="btn sm" onclick="editAppt('${a.id}')">Edit</button> <button class="btn sm danger" onclick="delAppt('${a.id}')">Cancel</button></td></tr>`).join("")}</tbody></table>`
+    :`<div class="empty">No matching appointments.</div>`;
+}
+views.calendar = function(){
+  content.innerHTML = `<div class="panel">
+    <div class="cal-toolbar">
+      <div class="cal-title" id="calTitle">Calendar</div>
+      <button class="btn sm" onclick="moveCal(-1)">&lsaquo;</button>
+      <button class="btn sm" onclick="goToday()">Today</button>
+      <button class="btn sm" onclick="moveCal(1)">&rsaquo;</button>
+      ${dateControl("cal_jump",calDate,2020,new Date().getFullYear()+5)}
+      <button class="btn sm" onclick="jumpCalDate()">Go</button>
+      ${["day","week","month","year"].map(v=>`<button class="btn sm ${calView===v?'primary':''}" onclick="setCalView('${v}')">${v[0].toUpperCase()+v.slice(1)}</button>`).join("")}
+      <button class="btn primary sm" onclick="go('appointments')">+ Appointment</button>
+    </div>
+    <div id="calendarView"></div>
+  </div>`;
+  renderCalendar();
+};
+function timeQuickSelect(){ return `<select class="btn sm" style="width:116px" onchange="if(this.value){$('#a_time').value=this.value;this.value=''}"><option value="">Quick time</option>${workSlots().map(t=>`<option value="${t}">${t}</option>`).join("")}</select>`; }
+function setNowTime(){ const d=new Date(); $("#a_time").value=normalizeTime30(`${String(d.getHours()).padStart(2,"0")}:${String(d.getMinutes()).padStart(2,"0")}`); }
+function timeToMin(t){ const [h,m]=(t||"").split(":").map(Number); return (h||0)*60+(m||0); }
+function minToTime(n){ n=(n+1440)%1440; return String(Math.floor(n/60)).padStart(2,"0")+":"+String(n%60).padStart(2,"0"); }
+function normalizeTime30(t){ if(!/^\d{1,2}:\d{2}$/.test(t||"")) return ""; return minToTime(Math.round(timeToMin(t)/30)*30); }
+function slotTimes(start,end){ const out=[]; for(let m=timeToMin(start);m<=timeToMin(end);m+=30) out.push(minToTime(m)); return out; }
+function workSlots(){
+  const start=DB.clinic.workStart||"08:00", end=DB.clinic.workEnd||"18:00";
+  return slotTimes(start,end);
+}
+function dparse(s){ const [y,m,d]=(s||todayISO()).split("-").map(Number); return new Date(y,m-1,d); }
+function diso(d){ const z=n=>String(n).padStart(2,"0"); return `${d.getFullYear()}-${z(d.getMonth()+1)}-${z(d.getDate())}`; }
+function dadd(d,n){ const x=new Date(d); x.setDate(x.getDate()+n); return x; }
+function startWeek(d){ const x=new Date(d); x.setDate(x.getDate()-x.getDay()); return x; }
+function add30(t){ if(!t) return ""; const [h,m]=t.split(":").map(Number), d=new Date(2000,0,1,h||0,m||0); d.setMinutes(d.getMinutes()+30); return String(d.getHours()).padStart(2,"0")+":"+String(d.getMinutes()).padStart(2,"0"); }
+function apptsOn(date){ return DB.appointments.filter(a=>a.date===date).sort((a,b)=>(a.time||"").localeCompare(b.time||"")); }
+function apptColor(id){ let h=0; for(const c of String(id||"")) h=(h*31+c.charCodeAt(0))%360; return `hsl(${h},75%,88%)`; }
+function apptChip(a){ const bg=apptColor(a.patientId); return `<button class="appt-chip" style="background:${bg};border-color:${bg};color:#0f172a" onclick="editAppt('${a.id}')" title="Edit appointment"><b>${esc(a.time||"")} - ${esc(add30(a.time)||"")} (${esc(fullName(patientById(a.patientId)))})</b>${esc(a.reason||"30 minute visit")}</button>`; }
+function setCalView(v){ calView=v; if(v==="day") calDate=todayISO(); views.calendar(); }
+function goToday(){ calDate=todayISO(); views.calendar(); }
+function jumpCalDate(){ calDate=$("#cal_jump")?.value||calDate; views.calendar(); }
+function moveCal(dir){
+  const d=dparse(calDate);
+  if(calView==="day") calDate=diso(dadd(d,dir));
+  if(calView==="week") calDate=diso(dadd(d,dir*7));
+  if(calView==="month"){ d.setMonth(d.getMonth()+dir); calDate=diso(d); }
+  if(calView==="year"){ d.setFullYear(d.getFullYear()+dir); calDate=diso(d); }
+  views.calendar();
+}
+function renderCalendar(){
+  const box=$("#calendarView"), title=$("#calTitle"); if(!box||!title) return;
+  const d=dparse(calDate), months=["January","February","March","April","May","June","July","August","September","October","November","December"];
+  if(calView==="day"){
+    title.textContent = d.toLocaleDateString(undefined,{weekday:"long",month:"long",day:"numeric",year:"numeric"});
+    const slots = Array.from(new Set([...workSlots(), ...apptsOn(calDate).map(a=>normalizeTime30(a.time))])).filter(Boolean).sort();
+    box.innerHTML = `<div class="time-grid" style="grid-template-columns:86px 1fr">
+      <div class="time-head">Time</div><div class="time-head">${d.toLocaleDateString(undefined,{weekday:"long",month:"short",day:"numeric"})}</div>
+      ${slots.map(t=>{ const a=apptsOn(calDate).filter(x=>normalizeTime30(x.time)===t);
+        return `<div class="time-label">${t}</div><div class="time-cell">${a.map(apptChip).join("")}</div>`; }).join("")}</div>`;
+  } else if(calView==="week"){
+    const start=startWeek(d), days=[0,1,2,3,4,5,6].map(i=>dadd(start,i));
+    title.textContent = `${days[0].toLocaleDateString()} - ${days[6].toLocaleDateString()}`;
+    const weekAppts = days.flatMap(x=>apptsOn(diso(x)).map(a=>normalizeTime30(a.time)));
+    const slots = Array.from(new Set([...workSlots(), ...weekAppts])).filter(Boolean).sort();
+    box.innerHTML = `<div class="time-grid" style="grid-template-columns:86px repeat(7,1fr)">
+      <div class="time-head">Time</div>${days.map(x=>`<div class="time-head">${x.toLocaleDateString(undefined,{weekday:"short"})}<br>${x.getMonth()+1}/${x.getDate()}</div>`).join("")}
+      ${slots.map(t=>`<div class="time-label">${t}</div>${days.map(x=>{ const a=apptsOn(diso(x)).filter(y=>normalizeTime30(y.time)===t);
+        return `<div class="time-cell">${a.map(apptChip).join("")}</div>`; }).join("")}`).join("")}</div>`;
+  } else if(calView==="month"){
+    const first=new Date(d.getFullYear(),d.getMonth(),1), start=startWeek(first);
+    const days=Array.from({length:42},(_,i)=>dadd(start,i));
+    title.textContent = `${months[d.getMonth()]} ${d.getFullYear()}`;
+    box.innerHTML = `<div class="calendar-grid" style="grid-template-columns:repeat(7,1fr)">${["Sun","Mon","Tue","Wed","Thu","Fri","Sat"].map(x=>`<div class="cal-day-head">${x}</div>`).join("")}${days.map(x=>`<div class="cal-cell ${x.getMonth()!==d.getMonth()?'cal-muted':''}" onclick="calDate='${diso(x)}';calView='day';views.calendar()"><div class="cal-date">${x.getDate()}</div>${apptsOn(diso(x)).slice(0,3).map(apptChip).join("")}${apptsOn(diso(x)).length>3?`<span class="hint">+${apptsOn(diso(x)).length-3} more</span>`:""}</div>`).join("")}</div>`;
+  } else {
+    title.textContent = `${d.getFullYear()}`;
+    box.innerHTML = `<div class="year-grid">${months.map((m,i)=>{ const list=DB.appointments.filter(a=>{ const x=dparse(a.date); return x.getFullYear()===d.getFullYear() && x.getMonth()===i; }).sort((a,b)=>(a.date+a.time).localeCompare(b.date+b.time));
+      return `<div class="month-card" onclick="calDate='${d.getFullYear()}-${String(i+1).padStart(2,"0")}-01';calView='month';views.calendar()"><h4>${m}</h4>${list.slice(0,4).map(a=>`<div class="appt-chip"><b>${esc(a.date)} ${esc(a.time||"")} - ${esc(add30(a.time)||"")}</b>${esc(fullName(patientById(a.patientId)))}</div>`).join("")||'<span class="muted">No bookings</span>'}${list.length>4?`<div class="hint">+${list.length-4} more</div>`:""}</div>`; }).join("")}</div>`;
+  }
+}
+
+/* ============================ SETTINGS / BACKUP ============================ */
+let settingsTab = "clinic";
+function switchSettingsTab(tab){ settingsTab=tab; showSettingsTab(); }
+function showSettingsTab(){
+  document.querySelectorAll(".settings-section").forEach(s=>s.classList.toggle("on",s.dataset.settings===settingsTab));
+  document.querySelectorAll(".pill-tabs button").forEach(b=>b.classList.toggle("on",b.textContent.toLowerCase().includes(settingsTab==="clinic"?"clinic":settingsTab==="services"?"billing":settingsTab)));
+}
+views.settings = function(){
+  const c=DB.clinic;
+  content.innerHTML=`<div class="pill-tabs">
+    ${[["clinic","Clinic Info"],["services","Billing Codes"],["backup","Data Backup"],["export","Spreadsheet Export"]].map(t=>`<button class="${settingsTab===t[0]?'on':''}" onclick="switchSettingsTab('${t[0]}')">${t[1]}</button>`).join("")}
+  </div>
+  <div class="panel settings-section" data-settings="clinic"><h3>Clinic Details</h3>
+    <div class="grid three">
+      ${inp2("name","Clinic Name",c.name)}${inp2("provider","Provider",c.provider)}${inp2("phone","Phone",c.phone)}
+      ${inp2("email","Email",c.email)}${inp2("currency","Currency Symbol",c.currency)}${inp2("taxRate","Default Tax %",c.taxRate)}
+      <div class="field"><label>Work Day Starts</label><input id="c_workStart" type="time" step="1800" value="${esc(c.workStart||"08:00")}"/></div>
+      <div class="field"><label>Work Day Ends</label><input id="c_workEnd" type="time" step="1800" value="${esc(c.workEnd||"18:00")}"/></div>
+      <div class="field full">${inp2raw("address","Address",c.address)}</div>
+    </div>
+    <div class="sec-title">Branding</div>
+    <div class="grid">
+      <div class="field">
+        <label>Clinic Logo</label>
+        <div id="logoPreview">${clinicImgPreview("logo")}</div>
+        <label class="btn sm" style="margin-top:6px">&#128247; Upload Logo<input type="file" accept="image/png,image/jpeg,image/svg+xml" style="display:none" onchange="uploadClinicImage('logo',this)"></label>
+      </div>
+      <div class="field">
+        <label>Doctor's Signature</label>
+        <div id="signaturePreview">${clinicImgPreview("signature")}</div>
+        <label class="btn sm" style="margin-top:6px">&#9997; Upload Signature<input type="file" accept="image/png,image/jpeg,image/svg+xml" style="display:none" onchange="uploadClinicImage('signature',this)"></label>
+      </div>
+      <div class="field full">
+        <label>Pain Diagram — Body Chart Image</label>
+        <p class="hint" style="margin:2px 0 6px">Upload a clinical front/back body chart image (PNG/JPEG/SVG). It's used behind the clickable pain regions on the Intake form and SOAP notes, and travels with your backups and data file. If none is uploaded, the app looks for <code>body-chart.png</code> next to this file.</p>
+        <div id="bodyChartPreview">${clinicImgPreview("bodyChart")}</div>
+        <label class="btn sm" style="margin-top:6px">&#128101; Upload Body Chart<input type="file" accept="image/png,image/jpeg,image/svg+xml" style="display:none" onchange="uploadClinicImage('bodyChart',this)"></label>
+      </div>
+    </div>
+    <div class="sec-title">Admin Password</div>
+    <p class="desc">Change the password used to sign in at <code>portal.html</code>. Stored locally in this browser only.</p>
+    <div class="grid three" style="align-items:end">
+      <div class="field"><label>Current Password</label><input id="admin_cur" type="password" autocomplete="current-password"/></div>
+      <div class="field"><label>New Password</label><input id="admin_new" type="password" autocomplete="new-password"/></div>
+      <div class="field"><label>Confirm New Password</label><input id="admin_confirm" type="password" autocomplete="new-password"/></div>
+    </div>
+    
+    <div style="margin-top:12px"><button class="btn primary" onclick="saveClinic()">Save Clinic</button></div>
+  </div>
+  <div class="panel settings-section" data-settings="services"><h3>Services / Billing Codes</h3>
+    <p class="desc">Create billing-code profiles for different fee schedules or service sets. Edit the table below, then save it to a profile.</p>
+    <div class="row-actions" style="align-items:center;margin-bottom:12px">
+      <label class="hint">Active Profile</label>
+      <select id="svc_profile" class="btn" style="min-width:220px" onchange="loadServiceProfile(this.value)">${serviceProfiles().map(p=>`<option value="${p.id}" ${p.id===DB.clinic.activeServiceProfileId?'selected':''}>${esc(p.name)}</option>`).join("")}</select>
+      <button class="btn sm" onclick="saveServicesAsProfile()">Save as New Profile</button>
+      <button class="btn sm" onclick="updateServiceProfile()">Save Changes to Profile</button>
+      <button class="btn sm" onclick="renameServiceProfile()">Rename Profile</button>
+      <button class="btn sm danger" onclick="deleteServiceProfile()">Delete Profile</button>
+      <button class="btn sm" onclick="restoreDefaultServices()">Restore Default Codes</button>
+    </div>
+    <table><thead><tr><th>Code</th><th>Description</th><th>Price</th><th></th></tr></thead><tbody id="svcRows"></tbody></table>
+    <button class="btn sm" style="margin-top:8px" onclick="addSvc()">+ Add service</button>
+  </div>
+  <div class="panel settings-section" data-settings="backup"><h3>Portable Data File (recommended)</h3>
+    <p class="desc">Link a <b>PostureClinicData.json</b> file so the app saves everything into a real file that travels with the app. Put it inside this app folder — then copying the folder to a USB drive or another PC moves all patients, notes and invoices with it.</p>
+    <div id="fsStatus" style="margin-bottom:12px"></div>
+    <div class="row-actions" id="fsButtons"></div>
+    <p class="hint" style="margin-top:12px">Tip: after linking on a new computer, choose <b>Open existing data file</b> and pick the <code>PostureClinicData.json</code> that came with the folder.</p>
+  </div>
+  <div class="panel settings-section" data-settings="backup"><h3>Manual Backup &amp; Restore</h3>
+    <p class="desc">Also keep occasional manual backups. Works in any browser even without the file link above.</p>
+    <div class="row-actions">
+      <button class="btn primary" onclick="exportData()">&#11015; Export Backup (.json)</button>
+      <label class="btn">&#11014; Import Backup<input type="file" accept=".json" style="display:none" onchange="importData(this)"></label>
+      <button class="btn danger" onclick="wipe()">Erase All Data</button>
+    </div>
+  </div>
+  <div class="panel settings-section" data-settings="export"><h3>Export to Spreadsheet (Excel / CSV / Google Sheets)</h3>
+    <p class="desc">Transfer your database to Excel, Google Sheets, or any spreadsheet tool. Fully offline — no internet or accounts needed.</p>
+    <div class="sec-title">Excel (all tables, one file with tabs)</div>
+    <div class="row-actions">
+      <button class="btn accent" onclick="exportExcel()">&#128202; Export Excel (.xls)</button>
+    </div>
+    <div class="sec-title">CSV (one file per table)</div>
+    <div class="row-actions">
+      <button class="btn" onclick="exportCSV('patients')">&#11015; Patients</button>
+      <button class="btn" onclick="exportCSV('visits')">&#11015; SOAP Notes</button>
+      <button class="btn" onclick="exportCSV('invoices')">&#11015; Invoices</button>
+      <button class="btn" onclick="exportCSV('invoiceItems')">&#11015; Invoice Line Items</button>
+      <button class="btn" onclick="exportCSV('invoicePayments')">&#11015; Invoice Payments</button>
+      <button class="btn" onclick="exportCSV('appointments')">&#11015; Appointments</button>
+      <button class="btn primary" onclick="exportAllCSV()">&#11015; Export All as CSV (multiple files)</button>
+    </div>
+    <div class="sec-title">Google Sheets</div>
+    <div class="row-actions">
+      <button class="btn" onclick="exportGoogleSheetsFile()">&#128279; Download for Google Sheets + Open Sheets</button>
+    </div>
+    <p class="hint" style="margin-top:10px">This offline app cannot write directly into your Google account. The button downloads a Google Sheets-compatible Excel file, then opens Google Sheets. In Sheets, use <b>File &gt; Import &gt; Upload</b> and choose the downloaded file.</p>
+  </div>`;
+  renderFsPanel();
+  renderSvc();
+  showSettingsTab();
+};
+function inp2(id,l,v){return `<div class="field"><label>${l}</label><input id="c_${id}" value="${esc(v??'')}"/></div>`;}
+function inp2raw(id,l,v){return `<label>${l}</label><input id="c_${id}" value="${esc(v??'')}"/>`;}
+function saveClinic(){ ["name","provider","phone","email","currency","address","workStart","workEnd"].forEach(k=>DB.clinic[k]=$("#c_"+k).value); DB.clinic.taxRate=Number($("#c_taxRate").value)||0; save(); toast("Clinic saved"); }
+if(!nw || nw.length<6){ toast("New password must be at least 6 characters"); return; }
+  if(nw!==cf){ toast("New passwords do not match"); return; }
+  localStorage.setItem(ADMIN_PASS_KEY, nw);
+  ["admin_cur","admin_new","admin_confirm"].forEach(id=>{ const e=$("#"+id); if(e) e.value=""; });
+  toast("Admin password updated");
+}
+const imgKindLabel = kind => ({logo:"Logo",signature:"Signature",bodyChart:"Body chart"}[kind]||kind);
+function clinicImgPreview(kind){
+  const src=DB.clinic[kind];
+  const label=imgKindLabel(kind).toLowerCase();
+  const maxH=kind==="bodyChart"?120:70;
+  return src
+    ? `<img src="${esc(src)}" alt="${label}" style="max-height:${maxH}px;max-width:260px;border:1px solid var(--line);border-radius:8px;padding:4px;background:#fff"/>
+       <button class="btn sm danger" style="margin-left:8px;vertical-align:middle" onclick="removeClinicImage('${kind}')">Remove</button>`
+    : `<span class="muted">No ${label} uploaded.</span>`;
+}
+function uploadClinicImage(kind,inp){
+  const f=inp.files&&inp.files[0]; if(!f) return;
+  if(!/^image\//.test(f.type)){ toast("Please choose an image file (PNG, JPEG, or SVG)"); inp.value=""; return; }
+  const r=new FileReader();
+  r.onload=()=>{ DB.clinic[kind]=r.result; save(); const el=$("#"+kind+"Preview"); if(el) el.innerHTML=clinicImgPreview(kind); toast(imgKindLabel(kind)+" saved"); };
+  r.onerror=()=>toast("Could not read image");
+  r.readAsDataURL(f);
+}
+function removeClinicImage(kind){
+  delete DB.clinic[kind]; save(); const el=$("#"+kind+"Preview"); if(el) el.innerHTML=clinicImgPreview(kind);
+  toast(imgKindLabel(kind)+" removed");
+}
+function cloneServices(s){ return JSON.parse(JSON.stringify(s||[])); }
+function serviceProfiles(){
+  DB.clinic.serviceProfiles = DB.clinic.serviceProfiles || [{id:"default",name:"Default Chiropractic",services:cloneServices(DEFAULT_SERVICES)}];
+  DB.clinic.activeServiceProfileId = DB.clinic.activeServiceProfileId || DB.clinic.serviceProfiles[0].id;
+  DB.clinic.services = DB.clinic.services || cloneServices(DB.clinic.serviceProfiles[0].services);
+  return DB.clinic.serviceProfiles;
+}
+function loadServiceProfile(id){
+  const p=serviceProfiles().find(x=>x.id===id); if(!p) return;
+  DB.clinic.activeServiceProfileId=id; DB.clinic.services=cloneServices(p.services); save(); views.settings(); toast("Service profile loaded");
+}
+function saveServicesAsProfile(){
+  const name=prompt("Name this billing-code profile:"); if(!name) return;
+  const p={id:uid(),name:name.trim(),services:cloneServices(DB.clinic.services)};
+  serviceProfiles().push(p); DB.clinic.activeServiceProfileId=p.id; save(); views.settings(); toast("Service profile saved");
+}
+function updateServiceProfile(){
+  const p=serviceProfiles().find(x=>x.id===DB.clinic.activeServiceProfileId); if(!p) return;
+  p.services=cloneServices(DB.clinic.services); save(); toast("Profile updated");
+}
+function renameServiceProfile(){
+  const p=serviceProfiles().find(x=>x.id===DB.clinic.activeServiceProfileId); if(!p) return;
+  const name=prompt("New profile name:",p.name); if(!name) return;
+  p.name=name.trim(); save(); views.settings(); toast("Profile renamed");
+}
+function deleteServiceProfile(){
+  const profiles=serviceProfiles(); if(profiles.length<=1){ toast("Keep at least one profile"); return; }
+  const p=profiles.find(x=>x.id===DB.clinic.activeServiceProfileId); if(!p||!confirm(`Delete service profile "${p.name}"?`)) return;
+  DB.clinic.serviceProfiles=profiles.filter(x=>x.id!==p.id);
+  DB.clinic.activeServiceProfileId=DB.clinic.serviceProfiles[0].id;
+  DB.clinic.services=cloneServices(DB.clinic.serviceProfiles[0].services);
+  save(); views.settings(); toast("Profile deleted");
+}
+function restoreDefaultServices(){
+  if(!confirm("Restore the default chiropractic billing codes? Current table changes will be replaced.")) return;
+  DB.clinic.services=cloneServices(DEFAULT_SERVICES);
+  let p=serviceProfiles().find(x=>x.id==="default");
+  if(!p){ p={id:"default",name:"Default Chiropractic",services:cloneServices(DEFAULT_SERVICES)}; DB.clinic.serviceProfiles.unshift(p); }
+  else p.services=cloneServices(DEFAULT_SERVICES);
+  DB.clinic.activeServiceProfileId="default"; save(); views.settings(); toast("Default billing codes restored");
+}
+function renderSvc(){ const b=$("#svcRows"); if(!b)return; b.innerHTML=DB.clinic.services.map((s,i)=>`<tr>
+  <td><input value="${esc(s.code)}" oninput="DB.clinic.services[${i}].code=this.value;save()"/></td>
+  <td><input style="width:100%" value="${esc(s.desc)}" oninput="DB.clinic.services[${i}].desc=this.value;save()"/></td>
+  <td><input type="number" style="width:90px" value="${s.price}" oninput="DB.clinic.services[${i}].price=Number(this.value);save()"/></td>
+  <td><button class="btn sm danger" onclick="DB.clinic.services.splice(${i},1);save();renderSvc()">&times;</button></td></tr>`).join(""); }
+function addSvc(){ DB.clinic.services.push({code:"",desc:"",price:0}); save(); renderSvc(); }
+function renderFsPanel(){
+  const s=$("#fsStatus"), b=$("#fsButtons"); if(!s||!b) return;
+  if(!fsSupported()){
+    s.innerHTML=`<span class="tag amber">Not available in this browser</span> <span class="muted">Use Microsoft Edge or Chrome to link a data file, or use manual backup below.</span>`;
+    b.innerHTML=""; return;
+  }
+  if(needsReconnect){ s.innerHTML=`<span class="tag amber">Needs reconnect</span> <span class="muted">Click reconnect to re-grant access after restart.</span>`;
+    b.innerHTML=`<button class="btn primary" onclick="reconnectDataFile()">Reconnect data file</button>`; return; }
+  if(fileHandle){ s.innerHTML=`<span class="tag green">Linked</span> <b>${esc(fileHandle.name||"PostureClinicData.json")}</b> <span class="muted">— all changes save here automatically.</span>`;
+    b.innerHTML=`<button class="btn" onclick="openDataFile()">Open a different data file</button>
+      <button class="btn danger" onclick="disconnectDataFile()">Unlink</button>`; return; }
+  s.innerHTML=`<span class="tag amber">Not linked</span> <span class="muted">Data is only in this browser on this PC.</span>`;
+  b.innerHTML=`<button class="btn primary" onclick="connectDataFile()">Link new data file</button>
+    <button class="btn" onclick="openDataFile()">Open existing data file</button>`;
+}
+function exportData(){ const blob=new Blob([JSON.stringify(DB,null,2)],{type:"application/json"});
+  const a=document.createElement("a"); a.href=URL.createObjectURL(blob); a.download="posture-clinic-backup-"+todayISO()+".json"; a.click(); toast("Backup exported"); }
+function importData(inp){ const f=inp.files[0]; if(!f)return; const r=new FileReader();
+  r.onload=()=>{ try{ DB=JSON.parse(r.result); save(); toast("Backup imported"); go("dashboard"); }catch(e){ toast("Invalid file"); } }; r.readAsText(f); }
+function wipe(){ if(!confirm("Erase ALL patients, notes, and invoices? This cannot be undone."))return; localStorage.removeItem(DB_KEY); DB=seed(); _dirty=true; scheduleFileWrite(); toast("All data erased"); go("dashboard"); }
+
+/* ============================ SPREADSHEET EXPORT (Excel / CSV) ============================ */
+/* Build table data as {name, headers:[...], rows:[[...],...]} — shared by CSV and Excel */
+function painSummary(pain){ return Object.keys(pain||{}).map(k=>{ const p=pain[k]; return `${k}(${p.intensity ?? ""}${p.type?"/"+p.type:""})`; }).join("; "); }
+function itemsSummary(items){ return (items||[]).map(it=>`${it.qty||0}x ${it.desc||it.code||""} @${(Number(it.price)||0).toFixed(2)}`.trim()).join("; "); }
+function exportTable(name){
+  const P=DB.patients, name2=id=>fullName(patientById(id));
+  switch(name){
+    case "patients": return { name:"Patients",
+      headers:["ID","First","Last","DOB","Sex","Phone","Email","Occupation","Address","Insurance","Policy","Group","Emergency Name","Emergency Relationship","Emergency Phone","Chief Complaint","Pain Onset","Pain Type","Pain Level","Pain Frequency","Areas of Pain","Medical History","Medications","Allergies","Prior Treatment","Smoker","Exercise","Pregnant","Consent","Created"],
+      rows:P.map(p=>[p.id,p.first,p.last,p.dob,p.sex,p.phone,p.email,p.occupation,p.address,p.insurance,p.policy,p.group,p.emergencyName,p.emergencyRel,p.emergencyPhone,p.chiefComplaint,p.painOnset,p.painType,p.painLevel,p.painFreq,painSummary(p.pain),p.medicalHistory,p.medications,p.allergies,p.priorTreatment,p.smoker,p.exercise,p.pregnant,p.consent?"Yes":"No",p.created]) };
+    case "visits": return { name:"SOAP Notes",
+      headers:["ID","Date","Patient","Patient ID","Services Provided","Areas of Pain","Subjective","Objective","Assessment","Plan"],
+      rows:DB.visits.map(v=>[v.id,v.date,name2(v.patientId),v.patientId,soapServiceSummary(v),painSummary(v.pain),v.subjective,v.objective,v.assessment,v.plan]) };
+    case "invoices": return { name:"Invoices",
+      headers:["Invoice #","ID","Date","Patient","Patient ID","Status","Line Items","Discount","Tax Rate %","Total","Amount Paid","Outstanding Balance","Notes"],
+      rows:DB.invoices.map(i=>{ const t=invTotals(i); return [i.number,i.id,i.date,name2(i.patientId),i.patientId,i.status,itemsSummary(i.items),Number(i.discount)||0,Number(i.taxRate)||0,t.total,t.paid,t.balance,i.notes]; }) };
+    case "invoiceItems": { const rows=[];
+      DB.invoices.forEach(i=>(i.items||[]).forEach(it=>{ const qty=Number(it.qty)||0, price=Number(it.price)||0;
+        rows.push([i.number,i.date,name2(i.patientId),it.code,it.desc,qty,price,qty*price]); }));
+      return { name:"Invoice Items", headers:["Invoice #","Date","Patient","Code","Description","Qty","Price","Amount"], rows }; }
+    case "invoicePayments": { const rows=[];
+      DB.invoices.forEach(i=>{
+        if(Number(i.paidAmount)||0) rows.push([i.number,i.date,name2(i.patientId),"Previous",Number(i.paidAmount)||0,"Recorded before payment history"]);
+        (i.payments||[]).forEach(p=>rows.push([i.number,p.date,name2(i.patientId),p.id,Number(p.amount)||0,p.note]));
+      });
+      return { name:"Invoice Payments", headers:["Invoice #","Payment Date","Patient","Payment ID","Amount","Note / Method"], rows }; }
+    case "appointments": return { name:"Appointments",
+      headers:["ID","Date","Time","Patient","Patient ID","Reason"],
+      rows:DB.appointments.map(a=>[a.id,a.date,a.time,name2(a.patientId),a.patientId,a.reason]) };
+  }
+}
+
+function downloadBlob(content, filename, mime){
+  const blob=new Blob([content],{type:mime});
+  const a=document.createElement("a"); a.href=URL.createObjectURL(blob); a.download=filename; a.click();
+  setTimeout(()=>URL.revokeObjectURL(a.href),1000);
+}
+function csvCell(v){ const s=(v==null?"":String(v)); return /[",\n\r]/.test(s) ? '"'+s.replace(/"/g,'""')+'"' : s; }
+function tableToCSV(t){ return "\uFEFF" + [t.headers, ...t.rows].map(r=>r.map(csvCell).join(",")).join("\r\n"); }
+function exportCSV(name){
+  const t=exportTable(name); if(!t) return;
+  const slug=name.replace(/([a-z])([A-Z])/g,"$1-$2").toLowerCase();
+  downloadBlob(tableToCSV(t), `posture-clinic-${slug}-${todayISO()}.csv`, "text/csv;charset=utf-8");
+  toast(`${t.name} CSV exported`);
+}
+function exportAllCSV(){
+  ["patients","visits","invoices","invoiceItems","invoicePayments","appointments"].forEach((n,i)=>setTimeout(()=>exportCSV(n), i*300));
+  toast("Exporting all tables as CSV…");
+}
+
+/* Excel via SpreadsheetML 2003 XML — opens in Excel & Google Sheets with multiple tabs, no libraries */
+function xmlEsc(s){ return (s==null?"":String(s)).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&apos;'}[c])); }
+function xmlCell(v){
+  if(typeof v==="number" && isFinite(v)) return `<Cell><Data ss:Type="Number">${v}</Data></Cell>`;
+  return `<Cell><Data ss:Type="String">${xmlEsc(v)}</Data></Cell>`;
+}
+function xmlSheet(t){
+  const head=`<Row>${t.headers.map(h=>`<Cell ss:StyleID="hdr"><Data ss:Type="String">${xmlEsc(h)}</Data></Cell>`).join("")}</Row>`;
+  const body=t.rows.map(r=>`<Row>${r.map(xmlCell).join("")}</Row>`).join("");
+  return `<Worksheet ss:Name="${xmlEsc(t.name)}"><Table>${head}${body}</Table></Worksheet>`;
+}
+function exportExcel(){
+  const tables=["patients","visits","invoices","invoiceItems","invoicePayments","appointments"].map(exportTable);
+  const xml = `<?xml version="1.0"?>
+<?mso-application progid="Excel.Sheet"?>
+<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet"
+ xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet">
+<Styles><Style ss:ID="hdr"><Font ss:Bold="1"/><Interior ss:Color="#DBEAFE" ss:Pattern="Solid"/></Style></Styles>
+${tables.map(xmlSheet).join("\n")}
+</Workbook>`;
+  downloadBlob(xml, `posture-clinic-export-${todayISO()}.xls`, "application/vnd.ms-excel");
+  toast("Excel workbook exported");
+}
+function exportGoogleSheetsFile(){ exportExcel(); setTimeout(openGoogleSheets,600); toast("Downloaded Excel file. In Google Sheets use File > Import > Upload."); }
+function openGoogleSheets(){ window.open("https://sheets.new","_blank"); toast("Then use File > Import to load your CSV/Excel file"); }
+
+/* ============================ PATIENT PICKER (phone book) ============================ */
+let _pickerTarget = null, _pickerLetter = "All", _pickerQuery = "";
+const pickerFirstLetter = p => ((p.last||p.first||"").trim()[0]||"").toUpperCase();
+const pickerSortKey = p => ((p.last||p.first||"")+" "+(p.first||"")).trim().toLowerCase();
+function pickerDisplayName(p){
+  const last=(p.last||"").trim(), first=(p.first||"").trim();
+  if(last&&first) return esc(`${last}, ${first}`);
+  return esc(last||first||"Unknown");
+}
+function openPatientPicker(targetSelectId){
+  _pickerTarget = targetSelectId; _pickerLetter = "All"; _pickerQuery = "";
+  openModal(`
+    <div class="modal-head"><h3>&#128199; Select Patient</h3><button class="x" onclick="closeModal()">&times;</button></div>
+    <input id="pickerSearch" class="btn" style="width:100%;margin-bottom:10px" placeholder="Search name / phone / DOB / email…" oninput="pickerOnSearch(this.value)"/>
+    <div id="pickerAlpha" class="pill-tabs" style="gap:4px"></div>
+    <div id="pickerList" style="max-height:52vh;overflow:auto;margin-top:8px"></div>
+    <div class="modal-foot no-print"><button class="btn" onclick="closeModal()">Cancel</button></div>
+  `);
+  renderPickerAlpha(); renderPickerList();
+  const s = $("#pickerSearch"); if(s) s.focus();
+}
+function pickerOnSearch(v){ _pickerQuery = v; renderPickerList(); }
+function pickerSetLetter(l){ _pickerLetter = l; renderPickerAlpha(); renderPickerList(); }
+function renderPickerAlpha(){
+  const box = $("#pickerAlpha"); if(!box) return;
+  const present = {}; DB.patients.forEach(p=>{ const c=pickerFirstLetter(p); if(c) present[c]=true; });
+  const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
+  box.innerHTML = `<button class="${_pickerLetter==='All'?'on':''}" onclick="pickerSetLetter('All')">All</button>` +
+    letters.map(l=>`<button class="${_pickerLetter===l?'on':''}" ${present[l]?'':'disabled style="opacity:.35;cursor:default"'} onclick="pickerSetLetter('${l}')">${l}</button>`).join("");
+}
+function renderPickerList(){
+  const box = $("#pickerList"); if(!box) return;
+  const q = (_pickerQuery||"").toLowerCase().trim();
+  let list = DB.patients.slice().sort((a,b)=>pickerSortKey(a).localeCompare(pickerSortKey(b)));
+  if(_pickerLetter!=="All") list = list.filter(p=>pickerFirstLetter(p)===_pickerLetter);
+  if(q) list = list.filter(p=>(fullName(p)+" "+(p.phone||"")+" "+(p.dob||"")+" "+(p.email||"")).toLowerCase().includes(q));
+  box.innerHTML = list.length ? list.map(p=>`
+    <div class="painitem" style="cursor:pointer" onclick="pickPatient('${p.id}')">
+      <span class="nm">${pickerDisplayName(p)}</span>
+      <span class="muted">${esc(p.phone||"no phone")}${p.dob?" · "+esc(p.dob):""}</span>
+    </div>`).join("")
+    : `<div class="empty">No matching patients.</div>`;
+}
+function pickPatient(id){
+  const hadStack = !!modalStack.length;
+  if(hadStack) modalBack();
+  const sel = document.getElementById(_pickerTarget);
+  if(sel){ sel.value = id; sel.dispatchEvent(new Event("change",{bubbles:true})); }
+  if(!hadStack) closeModal();
+}
+
+/* ============================ PRINT ============================ */
+function printModal(){ window.print(); }
+
+/* ============================ INIT ============================ */
+initStorage();
+</script>
+
+<button type="button" class="portal-logout no-print" onclick="sessionStorage.removeItem('postureclinic_admin_auth');sessionStorage.removeItem('postureclinic_admin_auth_exp');PosturePortalAuth.signOut()">Sign out</button></body>
+</html>
