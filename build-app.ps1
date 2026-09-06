@@ -23,8 +23,8 @@ if ($c -notmatch 'portal-neumorph\.css') {
 if ($c -notmatch 'PosturePortalAuth\.requireAppAccess') {
   $auth = @'
 
-<script src="auth-config.js?v=2"></script>
-<script src="auth.js?v=2"></script>
+<script src="auth-config.js?v=3"></script>
+<script src="auth.js?v=3"></script>
 <script>
 document.documentElement.style.visibility = "hidden";
 PosturePortalAuth.requireAppAccess().then(function (allowed) {

@@ -40,7 +40,7 @@ if /I not "%CONFIRM%"=="Y" (
   exit /b 0
 )
 
-git commit -m "Add Posture Clinic staff portal with Flowra Clerk login"
+git commit -m "Add Posture Clinic staff portal with Clerk login"
 git push -u origin main
 echo.
 echo Done. Portal login: https://vaghakhani.github.io/posture-clinic-portal/login.html

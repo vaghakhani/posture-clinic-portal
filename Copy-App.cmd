@@ -31,7 +31,7 @@ exit /b 1
 :done
 echo.
 echo SUCCESS: app.html is ready.
-echo Open login.html and sign in with your Flowra / Clerk account.
+echo Open login.html and sign in with your Clerk account.
 pause
 exit /b 0
 

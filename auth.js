@@ -3,7 +3,7 @@
   var oauthIntentKey = "posturePortalOAuthIntent";
   var oauthErrorKey = "posturePortalOAuthError";
   var oauthProviderKey = "posturePortalOAuthProvider";
-  var clerkState = { clerk: null, clerkLoadPromise: null, oauthConfig: null };
+  var clerkState = { clerk: null, clerkLoadPromise: null };
 
   function getConfig() {
     return cfg;
@@ -38,43 +38,6 @@
     persistSession("", null);
   }
 
-  function apiUrl(path) {
-    var origin = (cfg.apiOrigin || "https://flowra.ca").replace(/\/$/, "");
-    return origin + path;
-  }
-
-  async function apiFetch(path, options) {
-    options = options || {};
-    var method = String(options.method || "GET").toUpperCase();
-    var headers = Object.assign({}, options.headers || {});
-    if (method !== "GET" && method !== "HEAD" && !headers["Content-Type"]) {
-      headers["Content-Type"] = "application/json";
-    }
-    var token = options.token || getToken();
-    if (token) headers.Authorization = "Bearer " + token;
-    var fetchOptions = Object.assign({}, options, { method: method, headers: headers });
-    delete fetchOptions.token;
-    var response = await fetch(apiUrl(path), fetchOptions);
-    var text = await response.text();
-    var data = null;
-    if (text) {
-      try { data = JSON.parse(text); } catch (e) { data = null; }
-    }
-    if (!response.ok) {
-      var error = new Error((data && data.error) || "Request failed");
-      error.status = response.status;
-      error.data = data;
-      throw error;
-    }
-    return data;
-  }
-
-  async function getOAuthConfig() {
-    if (clerkState.oauthConfig) return clerkState.oauthConfig;
-    clerkState.oauthConfig = await apiFetch(cfg.oauthConfigPath || "/api/auth/oauth-config");
-    return clerkState.oauthConfig;
-  }
-
   async function loadClerkScript(publishableKey) {
     if (window.Clerk) return;
     await new Promise(function (resolve, reject) {
@@ -100,9 +63,10 @@
     if (clerkState.clerk) return clerkState.clerk;
     if (clerkState.clerkLoadPromise) return clerkState.clerkLoadPromise;
     clerkState.clerkLoadPromise = (async function () {
-      var oauthConfig = await getOAuthConfig();
-      var publishableKey = oauthConfig && oauthConfig.clerkPublishableKey;
-      if (!publishableKey) throw new Error("Clerk is not configured yet.");
+      var publishableKey = cfg.clerkPublishableKey;
+      if (!publishableKey) {
+        throw new Error("Add your Clerk publishable key to auth-config.js (Clerk Dashboard → API keys).");
+      }
       await loadClerkScript(publishableKey);
       var clerk = window.Clerk;
       if (typeof clerk === "function") {
@@ -140,29 +104,6 @@
     return null;
   }
 
-  async function syncClerkSession() {
-    var clerk = await getClerk();
-    var session = await getActiveClerkSession(clerk);
-    if (!session) return false;
-    var token = await session.getToken();
-    if (!token) return false;
-    var previousToken = getToken();
-    var previousUser = getUser();
-    persistSession(token, previousUser);
-    try {
-      var response = await apiFetch(cfg.clerkSessionPath || "/api/auth/clerk/session", {
-        method: "POST",
-        token: token,
-        body: JSON.stringify({ mode: "login" })
-      });
-      persistSession((response && response.token) || token, (response && response.user) || previousUser);
-      return true;
-    } catch (error) {
-      persistSession(previousToken, previousUser);
-      throw error;
-    }
-  }
-
   function clerkUserEmail() {
     try {
       var clerkUser = window.Clerk && window.Clerk.user;
@@ -182,19 +123,28 @@
     return String((user && (user.email || user.primaryEmailAddress)) || clerkUserEmail() || "").toLowerCase();
   }
 
+  function sessionUser() {
+    var clerkUser = window.Clerk && window.Clerk.user;
+    return {
+      id: (clerkUser && clerkUser.id) || "",
+      email: clerkUserEmail()
+    };
+  }
+
+  async function syncClerkSession() {
+    var clerk = await getClerk();
+    var session = await getActiveClerkSession(clerk);
+    if (!session) return false;
+    var token = await session.getToken();
+    if (!token) return false;
+    persistSession(token, sessionUser());
+    return true;
+  }
+
   async function verifyClinicAccess(user) {
-    var currentUser = user || getUser();
-    try {
-      var result = await apiFetch(cfg.clinicAccessPath || "/api/clinic/posture/access", { method: "GET" });
-      if (result && result.allowed) return true;
-      throw new Error("You do not have access to the Posture Clinic portal.");
-    } catch (error) {
-      if (error.status === 404 || error.status === 501) {
-        var allow = (cfg.staffEmails || []).map(function (email) { return String(email).toLowerCase(); });
-        if (allow.indexOf(userEmail(currentUser)) >= 0) return true;
-      }
-      throw error;
-    }
+    var allow = (cfg.staffEmails || []).map(function (email) { return String(email).toLowerCase(); });
+    if (allow.indexOf(userEmail(user || getUser())) >= 0) return true;
+    throw new Error("You do not have access to the Posture Clinic portal.");
   }
 
   async function completeClerkSignIn(attempt) {

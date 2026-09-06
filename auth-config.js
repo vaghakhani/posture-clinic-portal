@@ -1,8 +1,5 @@
 window.POSTURE_PORTAL_AUTH = {
-  apiOrigin: "https://flowra.ca",
-  oauthConfigPath: "/api/auth/oauth-config",
-  clerkSessionPath: "/api/auth/clerk/session",
-  clinicAccessPath: "/api/clinic/posture/access",
+  clerkPublishableKey: "",
   tokenKey: "posturePortalToken",
   userKey: "posturePortalUser",
   loginPage: "login.html",

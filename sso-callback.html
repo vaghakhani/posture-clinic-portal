@@ -12,8 +12,8 @@
     <strong>Completing secure sign-in</strong>
     <p id="callbackCopy">Please wait while your clinic portal session is created.</p>
   </main>
-  <script src="auth-config.js?v=2"></script>
-  <script src="auth.js?v=2"></script>
+  <script src="auth-config.js?v=3"></script>
+  <script src="auth.js?v=3"></script>
   <script>
     PosturePortalAuth.completeOAuthReturn().catch(function (error) {
       document.getElementById("callbackCopy").textContent = error.message || "Sign-in could not be completed.";

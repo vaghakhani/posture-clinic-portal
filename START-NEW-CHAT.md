@@ -4,18 +4,20 @@ Use this file when starting a **separate Cursor chat** for the private staff por
 
 Do **not** mix this with the public website repo (`../Posture Clinic Website/`).
 
+This portal is **not** part of Flowra. Do not call Flowra APIs, host under flowra.ca, or share Flowra Clerk keys.
+
 ---
 
 ## Scope of the portal chat
 
 **In scope:** `D:\Cursor\Posture Clinic Portal\`
 
-- Clerk / Flowra staff login
+- Clerk staff login (email + Google)
 - `app.html` clinic management app
 - Private GitHub repo `posture-clinic-portal`
 - Clerk redirect URLs, staff access, portal hosting
 
-**Out of scope:** public marketing site, contact form, articles, i18n
+**Out of scope:** public marketing site, contact form, articles, i18n, Flowra
 
 Public site lives in `../Posture Clinic Website/` and only links here via `portal-config.js`.
 
@@ -26,15 +28,15 @@ Public site lives in `../Posture Clinic Website/` and only links here via `porta
 | Item | Status |
 |------|--------|
 | `login.html`, `login.js` | Done — Clerk email + Google |
-| `auth.js`, `auth-config.js` | Done — Flowra API at `https://flowra.ca` |
+| `auth.js`, `auth-config.js` | Done — Clerk only (no Flowra API) |
 | `sso-callback.html` | Done |
 | `portal-theme.css`, `portal-neumorph.css` | Done |
 | `Copy-App.cmd`, `Migrate-Portal.ps1` | Done — builds Clerk-gated `app.html` |
 | `Push-to-GitHub.cmd`, `Preview Portal.cmd` | Done |
-| `app.html` | **Run `.\Copy-App.cmd` if missing** |
-| GitHub private repo | User creates `posture-clinic-portal` |
+| `app.html` | Clerk-gated; run `.\Copy-App.cmd` if missing |
+| GitHub private repo | `posture-clinic-portal` |
+| Clerk publishable key | Paste into `auth-config.js` |
 | Clerk redirect URLs | User must add portal host URLs |
-| Flowra API `GET /api/clinic/posture/access` | Not built — uses email allowlist fallback |
 
 ---
 
@@ -43,10 +45,11 @@ Public site lives in `../Posture Clinic Website/` and only links here via `porta
 Edit `auth-config.js`:
 
 ```javascript
+clerkPublishableKey: "pk_live_..."
 staffEmails: ["ardeshir@drekhtiari.com"]
 ```
 
-Fallback: if API returns 404/501, only listed emails can enter `app.html`.
+Only listed emails can enter `app.html`.
 
 ---
 
@@ -80,12 +83,10 @@ Local testing:
 ## Auth flow
 
 ```
-login.html → Clerk (oauth-config + clerk/session on flowra.ca)
-           → verifyClinicAccess (API or staffEmails)
+login.html → Clerk (publishable key in auth-config.js)
+           → staffEmails allowlist
            → app.html
 ```
-
-Reference implementation: `D:\Cursor\Flowra.ca\Website\account.js`
 
 ---
 
@@ -103,12 +104,11 @@ Staff Login on the public site opens this URL in a new tab.
 
 ## Likely next tasks in portal chat
 
-1. Confirm `.\Copy-App.cmd` produced `app.html` with Clerk gate (no `Posture8118` password)
-2. Create private GitHub repo and push
-3. Register Clerk redirect URLs
-4. Test login with `ardeshir@drekhtiari.com`
-5. Optional: implement Flowra backend `/api/clinic/posture/access`
-6. Optional: host under `flowra.ca/clinic/posture/` instead of GitHub Pages
+1. Paste Clerk publishable key into `auth-config.js`
+2. Register Clerk redirect URLs
+3. Test login with `ardeshir@drekhtiari.com`
+4. Push private repo if needed
+5. Host via GitHub Pages (Pro) or another private host — not Flowra
 
 ---
 
@@ -118,8 +118,8 @@ Staff Login on the public site opens this URL in a new tab.
 |------|---------|
 | `login.html` | Staff login page |
 | `login.js` | Form + Google button |
-| `auth.js` | Clerk load, session sync, access check |
-| `auth-config.js` | API URLs, token keys, staff allowlist |
+| `auth.js` | Clerk load, session, access check |
+| `auth-config.js` | Clerk key + staff allowlist |
 | `sso-callback.html` | OAuth return |
 | `app.html` | Clinic app (generated) |
 | `Copy-App.cmd` | Build/migrate app |
