@@ -53,6 +53,19 @@ $c = [regex]::Replace(
   "`r`n    "
 )
 
+# Clean up partial migrations that left password field fragments behind
+$c = [regex]::Replace(
+  $c,
+  '(?s)\s*<div class="field"><label>Current Password</label><input id="admin_cur"[^>]*/></div>\s*<div class="field"><label>New Password</label><input id="admin_new"[^>]*/></div>\s*<div class="field"><label>Confirm New Password</label><input id="admin_confirm"[^>]*/></div>\s*</div>\s*<div style="margin-top:12px"><button class="btn" onclick="changeAdminPass\(\)">Change Admin Password</button></div>\s*',
+  "`r`n    "
+)
+$c = [regex]::Replace(
+  $c,
+  '(?s)\s*<div class="field"><label>New Password</label><input id="admin_new"[^>]*/></div>\s*<div class="field"><label>Confirm New Password</label><input id="admin_confirm"[^>]*/></div>\s*</div>\s*<div style="margin-top:12px"><button class="btn" onclick="changeAdminPass\(\)">Change Admin Password</button></div>\s*',
+  "`r`n    "
+)
+$c = $c -replace '<div style="margin-top:12px"><button class="btn" onclick="changeAdminPass\(\)">Change Admin Password</button></div>\s*', ''
+
 $c = [regex]::Replace(
   $c,
   '(?s)const ADMIN_PASS_KEY = "postureclinic_admin_pass";\s*const DEFAULT_ADMIN_PASS = "Posture8118";\s*function getAdminPass\(\)\{[^}]*\}\s*function changeAdminPass\(\)\{.*?toast\("Admin password updated"\);\s*\}\s*',
