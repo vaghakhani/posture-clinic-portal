@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Install Body Chart — Posture Clinic Portal</title>
+<style>
+  body{font-family:"Segoe UI",Roboto,Arial,sans-serif;max-width:720px;margin:40px auto;padding:0 20px;color:#0f172a;line-height:1.5}
+  h1{font-size:1.5rem;margin:0 0 8px}
+  .panel{border:1px solid #e2e8f0;border-radius:14px;padding:20px;margin:20px 0;background:#fff}
+  .btn{display:inline-block;border:1px solid #2563eb;background:#2563eb;color:#fff;padding:10px 16px;border-radius:9px;font-size:14px;cursor:pointer;text-decoration:none}
+  .btn.secondary{background:#fff;color:#2563eb}
+  .preview{max-width:100%;border:1px solid #e2e8f0;border-radius:12px;margin-top:16px;background:#fff}
+  .ok{color:#15803d;font-weight:600}
+  .hint{color:#64748b;font-size:14px}
+  input[type=file]{display:block;margin:12px 0}
+</style>
+</head>
+<body>
+  <h1>Install clinical body chart</h1>
+  <p class="hint">Choose your front/back clinical chart PNG once. The portal will use it locally for SOAP notes and intake.</p>
+
+  <div class="panel">
+    <label for="chartFile"><b>Body chart image (PNG)</b></label>
+    <input id="chartFile" type="file" accept="image/png,image/jpeg,image/webp" />
+    <p id="status" class="hint">No chart installed yet.</p>
+    <img id="preview" class="preview" alt="" hidden />
+    <div style="margin-top:16px;display:flex;gap:10px;flex-wrap:wrap">
+      <button type="button" class="btn" id="saveBtn" disabled>Save for local preview</button>
+      <a class="btn secondary" href="app.html">Open staff portal</a>
+    </div>
+  </div>
+
+  <div class="panel">
+    <h2 style="margin:0 0 8px;font-size:1rem">For Netlify deploy</h2>
+    <p class="hint" style="margin:0">After saving here, run <code>Deploy-to-Netlify.cmd</code> on your PC. It builds <code>body-chart.embed.js</code> for the live site.</p>
+  </div>
+
+<script>
+const KEY = "postureclinic_body_chart_default";
+const fileInput = document.getElementById("chartFile");
+const status = document.getElementById("status");
+const preview = document.getElementById("preview");
+const saveBtn = document.getElementById("saveBtn");
+let pendingDataUrl = "";
+
+function showSaved(dataUrl){
+  preview.src = dataUrl;
+  preview.hidden = false;
+  status.innerHTML = '<span class="ok">Body chart saved for local preview.</span> Open the staff portal and try a SOAP note.';
+}
+
+try{
+  const existing = localStorage.getItem(KEY);
+  if(existing){
+    showSaved(existing);
+  }
+}catch(e){}
+
+fileInput.addEventListener("change", function(){
+  const file = fileInput.files && fileInput.files[0];
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = function(){
+    pendingDataUrl = String(reader.result || "");
+    preview.src = pendingDataUrl;
+    preview.hidden = false;
+    status.textContent = "Ready to save: " + file.name;
+    saveBtn.disabled = !pendingDataUrl;
+  };
+  reader.readAsDataURL(file);
+});
+
+saveBtn.addEventListener("click", function(){
+  if(!pendingDataUrl) return;
+  try{
+    localStorage.setItem(KEY, pendingDataUrl);
+    window.POSTURE_DEFAULT_BODY_CHART = pendingDataUrl;
+    showSaved(pendingDataUrl);
+    saveBtn.disabled = true;
+  }catch(e){
+    status.textContent = "Could not save (storage full?). Try a smaller PNG.";
+  }
+});
+</script>
+</body>
+</html>

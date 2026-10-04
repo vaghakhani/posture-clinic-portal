@@ -17,14 +17,11 @@ Copy-Item -Path $WebsiteApp -Destination $Dst -Force
 $c = [IO.File]::ReadAllText($Dst)
 
 $newAuth = @'
-<script src="auth-config.js?v=3"></script>
-<script src="auth.js?v=3"></script>
-<script>
-document.documentElement.style.visibility = "hidden";
-PosturePortalAuth.requireAppAccess().then(function (allowed) {
-  if (allowed) document.documentElement.style.visibility = "";
-});
-</script>
+<script src="auth-config.js?v=5"></script>
+<script src="auth.js?v=5"></script>
+<script src="api-config.js?v=1"></script>
+<script src="clinic-sync.js?v=1"></script>
+<script>document.documentElement.style.visibility = "hidden";</script>
 
 '@
 
@@ -38,6 +35,42 @@ if ($c -match 'postureclinic_admin_auth' -and $c -notmatch 'PosturePortalAuth\.r
 if ($c -notmatch 'name="robots"') {
   $c = [regex]::Replace($c, '(?i)<meta charset="UTF-8"\s*/>', "<meta charset=`"UTF-8`" />`r`n<meta name=`"robots`" content=`"noindex, nofollow`" />", 1)
 }
+
+if ($c -notmatch 'portal-brand-logo') {
+  $c = [regex]::Replace(
+    $c,
+    '(?s)<div class="brand">\s*<h1>Posture Clinic</h1>\s*<p>Dr\. Ardeshir Ekhtiari, DC</p>\s*</div>',
+    "<div class=`"brand`">`r`n      <img class=`"portal-brand-logo`" src=`"Logo.png`" alt=`"Posture Clinic`" width=`"160`" height=`"160`" />`r`n    </div>",
+    1
+  )
+}
+
+if ($c -notmatch 'rel="icon"') {
+  $c = [regex]::Replace($c, '<title>Posture Clinic', '<link rel="icon" href="Logo.png" type="image/png" />`r`n<title>Posture Clinic', 1)
+}
+
+$sbFoot = @'
+    <div class="sb-foot">
+      <p class="sb-foot-copy">Clinic data is saved securely online.</p>
+      <button type="button" class="portal-logout no-print" onclick="PosturePortalAuth.signOut()">Sign out</button>
+    </div>
+'@
+
+if ($c -notmatch 'sb-foot-copy') {
+  $c = [regex]::Replace(
+    $c,
+    '<div class="sb-foot">Local &amp; private — data stays on this PC\.</div>',
+    $sbFoot,
+    1
+  )
+}
+
+$c = [regex]::Replace(
+  $c,
+  '\s*<button type="button" class="portal-logout no-print" onclick="PosturePortalAuth\.signOut\(\)">Sign out</button>\s*</body>',
+  '</body>',
+  1
+)
 
 $c = $c -replace "location\.replace\(""portal\.html""\);", "location.replace('login.html');"
 $c = [regex]::Replace(
@@ -78,6 +111,37 @@ $c = [regex]::Replace(
   '(?s)\r?\nif\(!nw \|\| nw\.length<6\)\{ toast\("New password must be at least 6 characters"\); return; \}.*?toast\("Admin password updated"\);\s*\}\s*',
   "`r`n"
 )
+
+if ($c -notmatch 'clinic-sync\.js') {
+  $c = [regex]::Replace(
+    $c,
+    '<script src="auth\.js\?v=\d+"></script>',
+    '<script src="auth.js?v=5"></script>`r`n<script src="api-config.js?v=1"></script>`r`n<script src="clinic-sync.js?v=1"></script>',
+    1
+  )
+}
+
+if ($c -notmatch 'bootPortal') {
+  $c = [regex]::Replace(
+    $c,
+    '(?s)/\* ============================ INIT ============================ \*/\s*initStorage\(\);',
+    @'
+/* ============================ INIT ============================ */
+(async function bootPortal(){
+  const allowed = await PosturePortalAuth.requireAppAccess();
+  if(!allowed) return;
+  await initStorage();
+  document.documentElement.style.visibility = "";
+})();
+'@,
+    1
+  )
+}
+
+$c = $c -replace 'Local &amp; private — data stays on this PC\.', 'Clinic data is saved securely online.'
+$c = $c -replace 'onclick="storageBadgeClick\(\)">Local only', '>Cloud synced'
+$c = $c -replace 'Fully offline — no internet or accounts needed\.', ''
+$c = $c -replace 'This offline app cannot write directly into your Google account\. The button downloads a Google Sheets-compatible Excel file, then opens Google Sheets\. ', 'Downloads a Google Sheets-compatible Excel file, then opens Google Sheets. '
 
 [IO.File]::WriteAllText($Dst, $c)
 

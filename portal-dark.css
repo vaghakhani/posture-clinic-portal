@@ -1,0 +1,565 @@
+/* Posture Clinic — dark mode (Apple-style depth, portal blue palette) */
+
+html[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #0b1220;
+  --soft: #0f172a;
+  --panel: #1a2332;
+  --surface: #1e293b;
+  --text: #f1f5f9;
+  --muted: #94a3b8;
+  --line: #334155;
+  --brand: #60a5fa;
+  --brand-dark: #93c5fd;
+  --brand-soft: rgba(96, 165, 250, 0.18);
+  --accent: #22d3ee;
+  --danger: #f87171;
+  --warn: #fbbf24;
+  --ok: #4ade80;
+  --neo-raised: 8px 8px 18px rgba(0, 0, 0, 0.42), -2px -2px 8px rgba(255, 255, 255, 0.03);
+  --neo-inset: inset 4px 4px 10px rgba(0, 0, 0, 0.42), inset -2px -2px 6px rgba(255, 255, 255, 0.04);
+}
+
+html[data-theme="dark"],
+html[data-theme="dark"] body {
+  background: #0b1220 !important;
+  color: #f1f5f9 !important;
+}
+
+html[data-theme="dark"] .app,
+html[data-theme="dark"] .main,
+html[data-theme="dark"] .content {
+  background: #0f172a !important;
+  color: #f1f5f9;
+}
+
+html[data-theme="dark"] .sidebar,
+html[data-theme="dark"] .sidebar .brand,
+html[data-theme="dark"] .sb-foot,
+html[data-theme="dark"] .topbar,
+html[data-theme="dark"] .stat,
+html[data-theme="dark"] .panel,
+html[data-theme="dark"] .profile-card,
+html[data-theme="dark"] .month-card,
+html[data-theme="dark"] .service-card,
+html[data-theme="dark"] .painitem,
+html[data-theme="dark"] .about-panel,
+html[data-theme="dark"] .info-panel,
+html[data-theme="dark"] .modal,
+html[data-theme="dark"] .modal-head,
+html[data-theme="dark"] .modal-foot,
+html[data-theme="dark"] .cal-desktop-grid,
+html[data-theme="dark"] .time-cell,
+html[data-theme="dark"] .cal-cell,
+html[data-theme="dark"] .time-grid,
+html[data-theme="dark"] .calendar-grid,
+html[data-theme="dark"] .cal-shell--ios.panel,
+html[data-theme="dark"] .ios-cal-top,
+html[data-theme="dark"] .form-email-box,
+html[data-theme="dark"] .form-quick-card,
+html[data-theme="dark"] .form-send-card,
+html[data-theme="dark"] .mobile-bottom-nav,
+html[data-theme="dark"] .mobile-menu-btn,
+html[data-theme="dark"] .mobile-search-btn,
+html[data-theme="dark"] .theme-toggle,
+html[data-theme="dark"] .portal-logout,
+html[data-theme="dark"] .topbar-form-copy,
+html[data-theme="dark"] .sb-cloud-badge,
+html[data-theme="dark"] .sb-foot #storageBadge {
+  background: #1a2332 !important;
+  color: #f1f5f9 !important;
+  border-color: #334155 !important;
+  box-shadow: var(--neo-raised) !important;
+}
+
+html[data-theme="dark"] .topbar .search input,
+html[data-theme="dark"] .field input,
+html[data-theme="dark"] .field select,
+html[data-theme="dark"] .field textarea,
+html[data-theme="dark"] .date-combo button,
+html[data-theme="dark"] .pill-tabs button,
+html[data-theme="dark"] .modal-back,
+html[data-theme="dark"] .form-quick-email,
+html[data-theme="dark"] .form-send-url,
+html[data-theme="dark"] .form-send-email,
+html[data-theme="dark"] .list-search,
+html[data-theme="dark"] .picker-search {
+  background: #111827 !important;
+  color: #f1f5f9 !important;
+  box-shadow: var(--neo-inset) !important;
+}
+
+html[data-theme="dark"] .btn {
+  background: #243044 !important;
+  color: #e2e8f0 !important;
+  box-shadow: var(--neo-raised) !important;
+}
+
+html[data-theme="dark"] .btn.primary,
+html[data-theme="dark"] .pill-tabs button.on,
+html[data-theme="dark"] .cal-segment button.active,
+html[data-theme="dark"] .ios-seg-btn.active {
+  background: linear-gradient(145deg, #3b82f6, #2563eb) !important;
+  color: #fff !important;
+}
+
+html[data-theme="dark"] .btn.accent {
+  background: linear-gradient(145deg, #06b6d4, #0891b2) !important;
+  color: #fff !important;
+}
+
+html[data-theme="dark"] .btn.danger {
+  color: #fca5a5 !important;
+}
+
+html[data-theme="dark"] .btn.danger-solid {
+  background: linear-gradient(145deg, #ef4444, #dc2626) !important;
+  border: none !important;
+  color: #fff !important;
+  box-shadow: 6px 6px 14px rgba(127, 29, 29, 0.45), -3px -3px 8px rgba(255,255,255,0.04) !important;
+}
+
+html[data-theme="dark"] .confirm-foot .btn.cancel-action {
+  background: var(--surface-2) !important;
+  border-color: var(--line) !important;
+  color: var(--text) !important;
+}
+
+html[data-theme="dark"] .nav a {
+  color: #e2e8f0 !important;
+}
+
+html[data-theme="dark"] .nav a:hover {
+  background: #243044 !important;
+}
+
+html[data-theme="dark"] .nav a.active {
+  background: linear-gradient(145deg, #3b82f6, #2563eb) !important;
+  color: #fff !important;
+}
+
+html[data-theme="dark"] .topbar-form-copy:hover,
+html[data-theme="dark"] .topbar-form-copy:active {
+  background: #243044 !important;
+}
+
+html[data-theme="dark"] .topbar-form-copy.copied {
+  background: rgba(34, 197, 94, 0.18) !important;
+  color: #86efac !important;
+}
+
+html[data-theme="dark"] .topbar h2,
+html[data-theme="dark"] .panel h3,
+html[data-theme="dark"] .cal-title,
+html[data-theme="dark"] .ios-cal-heading,
+html[data-theme="dark"] .ios-day-title,
+html[data-theme="dark"] .stat .n {
+  color: #93c5fd !important;
+}
+
+html[data-theme="dark"] .muted,
+html[data-theme="dark"] .hint,
+html[data-theme="dark"] .panel .desc,
+html[data-theme="dark"] .stat .l,
+html[data-theme="dark"] .ios-hour-label,
+html[data-theme="dark"] .ios-week-dow,
+html[data-theme="dark"] .nav-section-label {
+  color: #94a3b8 !important;
+}
+
+html[data-theme="dark"] .portal-brand-logo,
+html[data-theme="dark"] .brand-logo,
+html[data-theme="dark"] .letterhead-logo,
+html[data-theme="dark"] .clinical-logo {
+  filter: brightness(0) invert(1) sepia(0.35) saturate(2.5) hue-rotate(175deg) brightness(1.15) !important;
+}
+
+html[data-theme="dark"] .cal-day-head,
+html[data-theme="dark"] .time-head {
+  background: rgba(96, 165, 250, 0.12) !important;
+  color: #93c5fd !important;
+}
+
+html[data-theme="dark"] .cal-muted,
+html[data-theme="dark"] .time-label {
+  background: rgba(15, 23, 42, 0.65) !important;
+  color: #94a3b8 !important;
+}
+
+html[data-theme="dark"] .appt-chip,
+html[data-theme="dark"] .ios-appt-block {
+  background: rgba(96, 165, 250, 0.16) !important;
+  border-color: rgba(96, 165, 250, 0.35) !important;
+  color: #f1f5f9 !important;
+}
+
+html[data-theme="dark"] .ios-appt-time {
+  color: #93c5fd !important;
+}
+
+html[data-theme="dark"] table th,
+html[data-theme="dark"] table td {
+  border-bottom-color: #334155 !important;
+  color: #e2e8f0;
+}
+
+html[data-theme="dark"] tbody tr:hover {
+  background: rgba(255, 255, 255, 0.04) !important;
+}
+
+html[data-theme="dark"] .linkbtn {
+  color: #93c5fd !important;
+}
+
+html[data-theme="dark"] .mobile-bottom-nav button {
+  color: #94a3b8 !important;
+}
+
+html[data-theme="dark"] .mobile-bottom-nav button.active {
+  color: #93c5fd !important;
+  background: rgba(96, 165, 250, 0.14) !important;
+}
+
+html[data-theme="dark"] .mobile-nav-backdrop {
+  background: rgba(2, 6, 23, 0.72) !important;
+}
+
+html[data-theme="dark"] .modal-bg {
+  background: rgba(2, 6, 23, 0.78) !important;
+}
+
+html[data-theme="dark"] .toast {
+  background: #334155 !important;
+  color: #f8fafc !important;
+}
+
+html[data-theme="dark"] .portal-message.info {
+  background: rgba(30, 58, 138, 0.35) !important;
+  border-color: rgba(96, 165, 250, 0.45) !important;
+  color: #bfdbfe !important;
+}
+
+html[data-theme="dark"] .portal-message.success {
+  background: rgba(22, 101, 52, 0.28) !important;
+  border-color: rgba(74, 222, 128, 0.35) !important;
+  color: #bbf7d0 !important;
+}
+
+html[data-theme="dark"] .portal-message.warning {
+  background: rgba(146, 64, 14, 0.28) !important;
+  border-color: rgba(251, 191, 36, 0.35) !important;
+  color: #fde68a !important;
+}
+
+html[data-theme="dark"] .portal-message.error {
+  background: rgba(127, 29, 29, 0.28) !important;
+  border-color: rgba(248, 113, 113, 0.35) !important;
+  color: #fecaca !important;
+}
+
+html[data-theme="dark"] .confirm-dialog,
+html[data-theme="dark"] .confirm-foot,
+html[data-theme="dark"] .portal-dialog {
+  background: var(--surface) !important;
+  border-color: var(--line) !important;
+}
+
+html[data-theme="dark"] .confirm-head h4,
+html[data-theme="dark"] .confirm-body,
+html[data-theme="dark"] .portal-dialog h3,
+html[data-theme="dark"] .portal-dialog p {
+  color: var(--text) !important;
+}
+
+html[data-theme="dark"] .confirm-input,
+html[data-theme="dark"] .portal-dialog input {
+  background: var(--surface-2) !important;
+  border-color: var(--line) !important;
+  color: var(--text) !important;
+}
+
+html[data-theme="dark"] .consent-audit {
+  background: rgba(22, 101, 52, 0.16) !important;
+  border-color: rgba(74, 222, 128, 0.28) !important;
+}
+
+html[data-theme="dark"] .consent-audit--none {
+  background: var(--surface-2) !important;
+  border-color: var(--line) !important;
+}
+
+html[data-theme="dark"] .consent-audit-text {
+  color: var(--text) !important;
+}
+
+html[data-theme="dark"] .invoice-status-pill.unpaid {
+  background: rgba(59, 130, 246, 0.18) !important;
+  color: #93c5fd !important;
+  border-color: rgba(96, 165, 250, 0.35) !important;
+}
+
+html[data-theme="dark"] .invoice-status-pill.paid {
+  background: rgba(22, 101, 52, 0.22) !important;
+  color: #86efac !important;
+  border-color: rgba(74, 222, 128, 0.35) !important;
+}
+
+html[data-theme="dark"] .invoice-status-pill.partial {
+  background: rgba(146, 64, 14, 0.22) !important;
+  color: #fde68a !important;
+  border-color: rgba(251, 191, 36, 0.35) !important;
+}
+
+html[data-theme="dark"] .tag.green {
+  background: rgba(74, 222, 128, 0.18) !important;
+  color: #86efac !important;
+}
+
+html[data-theme="dark"] .tag.blue {
+  background: rgba(96, 165, 250, 0.18) !important;
+  color: #93c5fd !important;
+}
+
+html[data-theme="dark"] .tag.amber {
+  background: rgba(251, 191, 36, 0.18) !important;
+  color: #fcd34d !important;
+}
+
+html[data-theme="dark"] .ios-cal-segment,
+html[data-theme="dark"] .cal-segment {
+  background: rgba(15, 23, 42, 0.85) !important;
+}
+
+html[data-theme="dark"] .ios-seg-btn {
+  color: #94a3b8 !important;
+}
+
+html[data-theme="dark"] .ios-cal-nav-btn {
+  color: #60a5fa !important;
+}
+
+html[data-theme="dark"] .ios-cal-today-inline {
+  background: #243044 !important;
+  color: #93c5fd !important;
+  border-color: #334155 !important;
+}
+
+html[data-theme="dark"] .ios-cal-add-top {
+  background: linear-gradient(145deg, #3b82f6, #2563eb) !important;
+  color: #fff !important;
+}
+
+html[data-theme="dark"] .ios-week-strip,
+html[data-theme="dark"] .ios-hour-row,
+html[data-theme="dark"] .ios-cal-top {
+  border-color: #334155 !important;
+}
+
+html[data-theme="dark"] .ios-week-day {
+  color: #f1f5f9 !important;
+}
+
+html[data-theme="dark"] .empty {
+  color: #94a3b8 !important;
+}
+
+/* Theme toggle */
+.theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  min-width: 32px;
+  padding: 0;
+  border: none;
+  border-radius: 9px;
+  background: #e4ebf5;
+  box-shadow: 4px 4px 10px #c8d0e0, -4px -4px 10px #ffffff;
+  color: var(--brand-dark, #1e40af);
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.theme-toggle:hover {
+  color: var(--brand, #2563eb);
+}
+
+.theme-toggle .theme-icon {
+  width: 16px;
+  height: 16px;
+  display: none;
+  flex-shrink: 0;
+}
+
+.theme-toggle .theme-icon-sun {
+  display: none;
+}
+
+.theme-toggle .theme-icon-moon {
+  display: block;
+}
+
+html[data-theme="dark"] .theme-toggle {
+  background: #1a2332 !important;
+  box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.35), -2px -2px 6px rgba(255, 255, 255, 0.04) !important;
+  color: #93c5fd !important;
+}
+
+html[data-theme="dark"] .theme-toggle .theme-icon-sun {
+  display: block;
+}
+
+html[data-theme="dark"] .theme-toggle .theme-icon-moon {
+  display: none;
+}
+
+html[data-theme="dark"] .soap-patient-row:hover td {
+  background: rgba(96, 165, 250, 0.08) !important;
+}
+
+html[data-theme="dark"] .soap-patient-bar {
+  background: #1e293b !important;
+  border-color: #334155 !important;
+}
+
+html[data-theme="dark"] .chart-layout,
+html[data-theme="dark"] .chart-pane,
+html[data-theme="dark"] .chart-list-box {
+  background: #1a2332 !important;
+  border-color: #334155 !important;
+}
+
+html[data-theme="dark"] .chart-tabs {
+  background: #0f172a !important;
+  border-color: #334155 !important;
+}
+
+html[data-theme="dark"] .chart-tab {
+  color: #cbd5e1 !important;
+}
+
+html[data-theme="dark"] .chart-tab.on {
+  background: #1e293b !important;
+  color: #93c5fd !important;
+}
+
+html[data-theme="dark"] .chart-list-head {
+  background: #1e293b !important;
+  border-color: #334155 !important;
+  color: #93c5fd !important;
+}
+
+html[data-theme="dark"] .chart-list-row {
+  border-color: #334155 !important;
+}
+
+html[data-theme="dark"] .chart-list-row:hover {
+  background: rgba(96, 165, 250, 0.08) !important;
+}
+
+html[data-theme="dark"] .chart-pager button {
+  background: #1e293b !important;
+  border-color: #334155 !important;
+  color: #e2e8f0 !important;
+}
+
+html[data-theme="dark"] .chart-pager button.on {
+  background: #2563eb !important;
+  border-color: #2563eb !important;
+  color: #fff !important;
+}
+
+html[data-theme="dark"] .apps-search,
+html[data-theme="dark"] .apps-submissions-box,
+html[data-theme="dark"] .apps-pager button {
+  background: #1e293b !important;
+  border-color: #334155 !important;
+  color: #e2e8f0 !important;
+}
+
+html[data-theme="dark"] .apps-pager {
+  background: rgba(15, 23, 42, 0.7) !important;
+  border-color: #334155 !important;
+}
+
+html[data-theme="dark"] .apps-pager button.on {
+  background: #2563eb !important;
+  border-color: #2563eb !important;
+  color: #fff !important;
+}
+
+html[data-theme="dark"] .chart-pain-side {
+  border-color: #334155 !important;
+}
+
+html[data-theme="dark"] .chart-pain-areas {
+  color: #e2e8f0 !important;
+}
+
+html[data-theme="dark"] .editor-layout,
+html[data-theme="dark"] .editor-pane,
+html[data-theme="dark"] .editor-tabs {
+  background: #1a2332 !important;
+  border-color: #334155 !important;
+  color: #e2e8f0 !important;
+}
+
+html[data-theme="dark"] .editor-tab {
+  color: #cbd5e1 !important;
+}
+
+html[data-theme="dark"] .editor-tab.on {
+  background: #1e293b !important;
+  color: #93c5fd !important;
+}
+
+html[data-theme="dark"] .painitem {
+  background: #1e293b !important;
+  border-color: #334155 !important;
+  color: #e2e8f0 !important;
+}
+
+html[data-theme="dark"] .painitem.selected {
+  background: rgba(96, 165, 250, 0.12) !important;
+  border-color: rgba(96, 165, 250, 0.45) !important;
+}
+
+html[data-theme="dark"] .pain-opt {
+  color: #94a3b8 !important;
+}
+
+html[data-theme="dark"] .pain-opt select,
+html[data-theme="dark"] .painitem .pain-select {
+  background: #111827 !important;
+  border-color: #334155 !important;
+  color: #f1f5f9 !important;
+  box-shadow: none !important;
+}
+
+html[data-theme="dark"] .bodychart img {
+  background: #0f172a !important;
+  border-color: #334155 !important;
+}
+
+@media (max-width: 768px) {
+  .theme-toggle {
+    width: 30px;
+    height: 30px;
+    min-width: 30px;
+    border-radius: 8px;
+  }
+
+  .theme-toggle .theme-icon {
+    width: 15px;
+    height: 15px;
+  }
+}
+
+@media print {
+  html[data-theme="dark"] .portal-brand-logo,
+  html[data-theme="dark"] .clinical-logo,
+  html[data-theme="dark"] .letterhead-logo {
+    filter: none !important;
+  }
+}

@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Staff Portal Mobile Preview | Posture Clinic</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Segoe UI", Roboto, Arial, sans-serif;
+      background: #0f172a;
+      color: #e2e8f0;
+      min-height: 100vh;
+      padding: 24px 16px 32px;
+    }
+    h1 {
+      margin: 0 0 8px;
+      font-size: 1.25rem;
+      text-align: center;
+    }
+    .desc {
+      margin: 0 0 20px;
+      text-align: center;
+      color: #94a3b8;
+      font-size: 0.92rem;
+      line-height: 1.5;
+      max-width: 520px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 18px;
+    }
+    .toolbar button,
+    .toolbar a {
+      border: 0;
+      border-radius: 999px;
+      padding: 10px 16px;
+      font-size: 13px;
+      font-weight: 600;
+      text-decoration: none;
+      cursor: pointer;
+      background: #2563eb;
+      color: #fff;
+    }
+    .toolbar button.secondary,
+    .toolbar a.secondary {
+      background: #334155;
+      color: #e2e8f0;
+    }
+    .phone-shell {
+      width: min(100%, 390px);
+      margin: 0 auto;
+      border-radius: 28px;
+      padding: 12px;
+      background: linear-gradient(180deg, #1e293b, #0f172a);
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.45);
+    }
+    .phone-screen {
+      border-radius: 20px;
+      overflow: hidden;
+      background: #e4ebf5;
+      height: min(78vh, 844px);
+    }
+    .phone-screen iframe {
+      border: 0;
+      width: 100%;
+      height: 100%;
+      display: block;
+      background: #e4ebf5;
+    }
+    .note {
+      margin: 16px auto 0;
+      max-width: 520px;
+      text-align: center;
+      font-size: 0.82rem;
+      color: #64748b;
+      line-height: 1.45;
+    }
+  </style>
+</head>
+<body>
+  <h1>Staff portal — phone preview</h1>
+  <p class="desc">This shows the new mobile layout in a phone-sized frame. Sign in if prompted, then use the bottom menu and the <b>More</b> button for the full sidebar.</p>
+  <div class="toolbar">
+    <button type="button" id="reloadBtn">Reload preview</button>
+    <a class="secondary" href="app.html?mobilePreview=1" target="_blank" rel="noopener">Open full screen</a>
+  </div>
+  <div class="phone-shell">
+    <div class="phone-screen">
+      <iframe id="previewFrame" title="Staff portal mobile preview" src="app.html?mobilePreview=1"></iframe>
+    </div>
+  </div>
+  <p class="note">Local file: open this page in Cursor Simple Browser or your browser at<br><code>file:///D:/Cursor/Posture%20Clinic%20Portal/staff-mobile-preview.html</code></p>
+  <script>
+    document.getElementById("reloadBtn").addEventListener("click", function () {
+      var frame = document.getElementById("previewFrame");
+      frame.src = "app.html?mobilePreview=1";
+    });
+  </script>
+</body>
+</html>

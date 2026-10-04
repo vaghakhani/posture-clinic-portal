@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="robots" content="noindex, nofollow" />
+  <title>Patient Form | Posture Clinic</title>
+  <link rel="icon" type="image/png" sizes="32x32" href="Logo.png" />
+  <link rel="icon" type="image/png" sizes="192x192" href="Logo.png" />
+  <link rel="icon" type="image/png" sizes="512x512" href="Logo.png" />
+  <link rel="apple-touch-icon" href="Logo.png" />
+  <link rel="manifest" href="manifest.json" />
+  <meta name="theme-color" content="#0b1a33" />
+  <meta name="application-name" content="Posture Clinic" />
+  <meta name="apple-mobile-web-app-title" content="Posture Clinic" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="msapplication-TileImage" content="Logo.png" />
+  <meta name="msapplication-TileColor" content="#0b1a33" />
+  <link rel="stylesheet" href="patient-intake.css?v=19" />
+  <script>
+    if (/[?&]consent=/.test(location.search) || location.hash === "#consents") {
+      if ("scrollRestoration" in history) history.scrollRestoration = "manual";
+      document.documentElement.classList.add("returning-from-consent");
+    }
+  </script>
+</head>
+<body>
+  <div class="intake-page">
+    <header class="intake-header">
+      <img src="Logo.png" alt="Posture Clinic" width="120" height="120" />
+      <h1 id="formTitle">New Patient Intake Form</h1>
+      <p id="formSubtitle" class="sr-only">Patient intake</p>
+      <div class="clinic-contact">
+        <div>712 Davis Dr, Newmarket, ON L3Y 8C3</div>
+        <div><a href="tel:+16478358118" id="clinicPhoneLink" class="clinic-phone">647-835-8118</a></div>
+      </div>
+    </header>
+
+    <div id="statusBox" hidden></div>
+    <div id="formWrap">
+      <form id="patientIntakeForm" autocomplete="on">
+        <div class="panel">
+          <h2 id="panelIntro">Please complete your information before your visit.</h2>
+          <p class="desc">Fields marked with * are required.</p>
+
+          <div class="sec-title">Patient Information</div>
+          <div class="grid three keep-three">
+            <div class="field">
+              <label for="first">First Name *</label>
+              <input id="first" name="intake_first" autocomplete="section-patient given-name" required />
+            </div>
+            <div class="field">
+              <label for="last">Last Name *</label>
+              <input id="last" name="intake_last" autocomplete="section-patient family-name" required />
+            </div>
+            <div class="field field-dob">
+              <label for="dob">Date of Birth</label>
+              <div class="date-entry" data-date-id="dob">
+                <input id="dob" name="intake_dob" type="text" class="date-text" inputmode="numeric" placeholder="mm/dd/yyyy" autocomplete="section-patient bday" maxlength="10" />
+                <button type="button" class="date-cal-btn" data-date-for="dob" aria-label="Open calendar">&#128197;</button>
+                <div class="date-dropdown" id="dob_dropdown" hidden></div>
+              </div>
+            </div>
+          </div>
+          <div class="grid three">
+            <div class="field">
+              <label for="sex">Gender</label>
+              <select id="sex" name="intake_sex" data-placeholder="Select…" autocomplete="section-patient sex">
+                <option value="" selected disabled hidden></option>
+                <option>Man</option>
+                <option>Woman</option>
+                <option>Non-binary</option>
+                <option>Two-Spirit</option>
+                <option>Prefer not to say</option>
+                <option>Other</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="phone">Phone Number *</label>
+              <input id="phone" name="intake_phone" type="tel" inputmode="tel" autocomplete="section-patient tel" required />
+            </div>
+            <div class="field">
+              <label for="email">Email</label>
+              <input id="email" name="intake_email" type="email" inputmode="email" autocomplete="section-patient email" />
+            </div>
+          </div>
+          <div class="grid occ-address">
+            <div class="field field-occupation">
+              <label for="occupation">Occupation</label>
+              <input id="occupation" name="intake_occupation" autocomplete="off" />
+            </div>
+            <div class="field field-address">
+              <label for="address">Address</label>
+              <input id="address" name="intake_address" autocomplete="section-patient street-address" />
+            </div>
+          </div>
+
+          <div class="sec-title">Insurance</div>
+          <div class="grid three">
+            <div class="field">
+              <label for="insurance">Insurance Provider</label>
+              <input id="insurance" name="intake_insurance" autocomplete="off" />
+            </div>
+            <div class="field">
+              <label for="policy">Policy / Member #</label>
+              <input id="policy" name="intake_policy" autocomplete="off" />
+            </div>
+            <div class="field">
+              <label for="group">Group #</label>
+              <input id="group" name="intake_group" autocomplete="off" />
+            </div>
+          </div>
+          <div class="grid">
+            <div class="field full field-policy-holder" role="group" aria-labelledby="policyHolderLegend">
+              <div class="field-label" id="policyHolderLegend">Who is the Policy Holder?</div>
+              <div class="radio-row">
+                <label class="radio-option">
+                  <input type="radio" name="insuranceHolderIsPatient" id="insuranceHolderIsPatientYes" value="yes" checked />
+                  <span>I am the policy holder</span>
+                </label>
+                <label class="radio-option">
+                  <input type="radio" name="insuranceHolderIsPatient" id="insuranceHolderIsPatientNo" value="no" />
+                  <span>Someone else</span>
+                </label>
+              </div>
+            </div>
+          </div>
+          <div id="policyHolderFields" class="grid three keep-three" hidden>
+            <div class="field">
+              <label for="insuranceHolderName">Policy Holder Full Name</label>
+              <input id="insuranceHolderName" name="intake_insuranceHolderName" autocomplete="off" />
+            </div>
+            <div class="field field-dob">
+              <label for="insuranceHolderDob">Policy Holder Date of Birth</label>
+              <div class="date-entry" data-date-id="insuranceHolderDob">
+                <input id="insuranceHolderDob" name="intake_insuranceHolderDob" type="text" class="date-text" inputmode="numeric" placeholder="mm/dd/yyyy" autocomplete="off" maxlength="10" />
+                <button type="button" class="date-cal-btn" data-date-for="insuranceHolderDob" aria-label="Open calendar">&#128197;</button>
+                <div class="date-dropdown" id="insuranceHolderDob_dropdown" hidden></div>
+              </div>
+            </div>
+            <div class="field">
+              <label for="insuranceHolderRel">Relationship to Patient</label>
+              <select id="insuranceHolderRel" name="intake_insuranceHolderRel" data-placeholder="Select…">
+                <option value="" selected disabled hidden></option>
+                <option>Spouse</option>
+                <option>Parent</option>
+                <option>Partner</option>
+                <option>Child</option>
+                <option>Guardian</option>
+                <option>Other</option>
+              </select>
+            </div>
+          </div>
+
+          <div id="clinicalOnly">
+            <div class="sec-title">Areas of Pain</div>
+            <p class="desc">Check any areas where you feel pain. Use Other if your area is not listed.</p>
+            <div class="pain-grid" id="painRegions"></div>
+
+            <div class="sec-title">Medical History</div>
+            <div class="grid">
+              <div class="field full">
+                <label for="medicalHistory">Past medical / surgical history, conditions</label>
+                <textarea id="medicalHistory" name="intake_medicalHistory" class="fixed-area" rows="4"></textarea>
+              </div>
+              <div class="field full">
+                <label for="medications">Current Medications</label>
+                <textarea id="medications" name="intake_medications" class="fixed-area" rows="4"></textarea>
+              </div>
+              <div class="field full">
+                <label for="familyHistory">Family History</label>
+                <textarea id="familyHistory" name="intake_familyHistory" class="fixed-area" rows="4"></textarea>
+              </div>
+            </div>
+          </div>
+
+          <div id="consents" class="consent-section">
+            <div id="primaryConsentBlock" class="consent-panel">
+              <p id="primaryConsentHint" class="consent-hint">Open the <b id="consentHintTitle">Consent to Treatment</b> link below, scroll to the bottom, click <b>Accept</b>, then return here to check this box.</p>
+              <label class="consent-row" id="primaryConsentRow">
+                <input type="checkbox" id="primaryConsent" required />
+                <span id="primaryConsentText">I have read the <a class="consent-inline-link" id="primaryConsentLink" href="treatment-consent.html">Consent to Treatment</a> covering Chiropractic, Osteopathy, and Acupuncture, and I consent to evaluation and treatment, and confirm the information above is accurate.</span>
+              </label>
+            </div>
+          </div>
+
+          <input class="hp-field" type="text" id="company" name="company" tabindex="-1" autocomplete="off" />
+
+          <div class="actions">
+            <button class="btn primary" type="submit" id="submitBtn">Submit</button>
+          </div>
+        </div>
+      </form>
+    </div>
+
+    <div id="successWrap" hidden>
+      <div class="panel success-panel">
+        <h2>Thank you</h2>
+        <p>Your information has been sent to the clinic.</p>
+        <p class="desc">You may close this page.</p>
+      </div>
+    </div>
+  </div>
+
+  <script src="api-config.js?v=2"></script>
+  <script src="clinic-sync.js?v=8"></script>
+  <script src="patient-intake.js?v=22"></script>
+</body>
+</html>

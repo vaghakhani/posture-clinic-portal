@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="color-scheme" content="light only" />
+  <meta name="supported-color-schemes" content="light" />
+  <title>Patient Form Email Preview | Posture Clinic</title>
+  <style>
+    :root { color-scheme: light only; supported-color-schemes: light; }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Segoe UI", Roboto, Arial, sans-serif;
+      background: #e2e8f0;
+      color: #0f172a;
+      padding: 24px 16px 48px;
+    }
+    body.dark-preview {
+      background: #0f172a;
+      color: #e2e8f0;
+    }
+    body.dark-preview .page-desc,
+    body.dark-preview .preview-block .subject,
+    body.dark-preview .email-meta {
+      color: #94a3b8;
+    }
+    body.dark-preview .email-frame {
+      background: #1e293b;
+      border-color: #334155;
+    }
+    .preview-toggle {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin: 0 0 24px;
+    }
+    .preview-toggle button {
+      border: 1px solid #cbd5e1;
+      background: #fff;
+      color: #0f172a;
+      border-radius: 999px;
+      padding: 8px 16px;
+      font-size: 13px;
+      cursor: pointer;
+    }
+    .preview-toggle button.active {
+      background: #2563eb;
+      border-color: #2563eb;
+      color: #fff;
+    }
+    body.dark-preview .preview-toggle button {
+      background: #1e293b;
+      border-color: #475569;
+      color: #e2e8f0;
+    }
+    body.dark-preview .preview-toggle button.active {
+      background: #2563eb;
+      border-color: #2563eb;
+      color: #fff;
+    }
+    .pc-email-header, .pc-email-header td, .pc-email-header table { background-color: #dbeafe !important; background-image: linear-gradient(#dbeafe, #dbeafe) !important; }
+    .pc-email-body, .pc-email-body td, .pc-email-body table { background-color: #ffffff !important; background-image: linear-gradient(#ffffff, #ffffff) !important; }
+    .pc-email-logo-wrap { background-color: #ffffff !important; background-image: linear-gradient(#ffffff, #ffffff) !important; border-radius: 12px; padding: 8px; display: inline-block; }
+    .pc-email-text, .pc-email-text font, .pc-email-text span { color: #333333 !important; -webkit-text-fill-color: #333333 !important; }
+    .pc-email-signoff, .pc-email-signoff font, .pc-email-signoff span { color: #1e3a8a !important; -webkit-text-fill-color: #1e3a8a !important; }
+    .pc-email-contact, .pc-email-contact font, .pc-email-contact span { color: #475569 !important; -webkit-text-fill-color: #475569 !important; }
+    .pc-email-btn, .pc-email-btn font, .pc-email-btn span { color: #ffffff !important; -webkit-text-fill-color: #ffffff !important; background-color: #2563eb !important; background-image: linear-gradient(#2563eb, #2563eb) !important; }
+    @media (prefers-color-scheme: dark) {
+      .pc-email-header, .pc-email-header td, .pc-email-header table, .pc-email-header div { background-color: #dbeafe !important; background-image: linear-gradient(#dbeafe, #dbeafe) !important; }
+      .pc-email-header .pc-clinic-name, .pc-email-header .pc-clinic-name font, .pc-email-header .pc-clinic-name span { color: #1e3a8a !important; -webkit-text-fill-color: #1e3a8a !important; }
+      .pc-email-header .pc-provider, .pc-email-header .pc-provider font, .pc-email-header .pc-provider span { color: #1e40af !important; -webkit-text-fill-color: #1e40af !important; }
+      .pc-email-body, .pc-email-body td, .pc-email-body table, .pc-email-body div { background-color: #ffffff !important; background-image: linear-gradient(#ffffff, #ffffff) !important; }
+      .pc-email-text, .pc-email-text font, .pc-email-text span { color: #333333 !important; -webkit-text-fill-color: #333333 !important; }
+      .pc-email-logo { filter: none !important; -webkit-filter: none !important; opacity: 1 !important; }
+    }
+    body.dark-preview .pc-email-header, body.dark-preview .pc-email-header td, body.dark-preview .pc-email-header table, body.dark-preview .pc-email-header div { background-color: #dbeafe !important; background-image: linear-gradient(#dbeafe, #dbeafe) !important; }
+    body.dark-preview .pc-email-header .pc-clinic-name, body.dark-preview .pc-email-header .pc-clinic-name font, body.dark-preview .pc-email-header .pc-clinic-name span { color: #1e3a8a !important; -webkit-text-fill-color: #1e3a8a !important; }
+    body.dark-preview .pc-email-header .pc-provider, body.dark-preview .pc-email-header .pc-provider font, body.dark-preview .pc-email-header .pc-provider span { color: #1e40af !important; -webkit-text-fill-color: #1e40af !important; }
+    body.dark-preview .pc-email-body, body.dark-preview .pc-email-body td, body.dark-preview .pc-email-body table, body.dark-preview .pc-email-body div { background-color: #ffffff !important; background-image: linear-gradient(#ffffff, #ffffff) !important; }
+    body.dark-preview .pc-email-text, body.dark-preview .pc-email-text font, body.dark-preview .pc-email-text span { color: #333333 !important; -webkit-text-fill-color: #333333 !important; }
+    body.dark-preview .pc-email-signoff, body.dark-preview .pc-email-signoff font, body.dark-preview .pc-email-signoff span { color: #1e3a8a !important; -webkit-text-fill-color: #1e3a8a !important; }
+    body.dark-preview .pc-email-contact, body.dark-preview .pc-email-contact font, body.dark-preview .pc-email-contact span { color: #475569 !important; -webkit-text-fill-color: #475569 !important; }
+    body.dark-preview .pc-email-btn, body.dark-preview .pc-email-btn font, body.dark-preview .pc-email-btn span { color: #ffffff !important; -webkit-text-fill-color: #ffffff !important; background-color: #2563eb !important; background-image: linear-gradient(#2563eb, #2563eb) !important; }
+    h1 {
+      text-align: center;
+      font-size: 1.35rem;
+      margin: 0 0 8px;
+    }
+    .page-desc {
+      text-align: center;
+      color: #64748b;
+      margin: 0 0 28px;
+      font-size: 0.95rem;
+    }
+    .previews {
+      display: grid;
+      gap: 32px;
+      max-width: 620px;
+      margin: 0 auto;
+    }
+    .preview-block h2 {
+      font-size: 1rem;
+      margin: 0 0 6px;
+      color: #1e40af;
+    }
+    .preview-block .subject {
+      margin: 0 0 14px;
+      font-size: 0.88rem;
+      color: #64748b;
+    }
+    .email-frame {
+      background: #f8fafc;
+      border: 1px solid #cbd5e1;
+      border-radius: 16px;
+      padding: 20px;
+    }
+    .email-meta {
+      font-size: 0.82rem;
+      color: #64748b;
+      margin-bottom: 16px;
+      padding-bottom: 12px;
+      border-bottom: 1px dashed #cbd5e1;
+    }
+  </style>
+</head>
+<body>
+  <h1>Patient form email preview</h1>
+  <p class="page-desc">This is how the HTML email looks when staff click <b>Send email</b> in Applications.</p>
+  <div class="preview-toggle">
+    <button type="button" class="active" id="btnLightPreview" onclick="setPreviewMode('light')">Light mode preview</button>
+    <button type="button" id="btnDarkPreview" onclick="setPreviewMode('dark')">Dark mode preview</button>
+  </div>
+
+  <div class="previews">
+    <section class="preview-block">
+      <h2>Chiropractor Form</h2>
+      <p class="subject"><b>Subject:</b> Complete Your Patient Intake Form — Posture Clinic</p>
+      <div class="email-frame">
+        <div class="email-meta">
+          <div><b>From:</b> Posture Clinic &lt;ardeshir@drekhtiari.com&gt;</div>
+          <div><b>Reply-To:</b> ardeshir@drekhtiari.com</div>
+        </div>
+        <div style="font-family:Segoe UI,Arial,sans-serif;max-width:560px;margin:0 auto;color:#0f172a">
+          <div class="pc-email-header" bgcolor="#dbeafe" style="background-color:#dbeafe;background-image:linear-gradient(#dbeafe,#dbeafe);color:#0f172a;padding:20px 24px;border-radius:14px 14px 0 0;border:1px solid #bfdbfe;border-bottom:0">
+            <table role="presentation" width="100%" cellpadding="0" cellspacing="0" bgcolor="#dbeafe" style="border-collapse:collapse;background-color:#dbeafe;background-image:linear-gradient(#dbeafe,#dbeafe)">
+              <tr>
+                <td style="vertical-align:middle;text-align:left;background-color:#dbeafe">
+                  <div class="pc-clinic-name" style="font-size:22px;font-weight:700;line-height:1.2;color:#1e3a8a;-webkit-text-fill-color:#1e3a8a;"><span style="color:#1e3a8a !important;-webkit-text-fill-color:#1e3a8a !important;"><font color="#1e3a8a">Posture Clinic</font></span></div>
+                  <div class="pc-provider" style="margin-top:6px;color:#1e40af;-webkit-text-fill-color:#1e40af;"><span style="color:#1e40af !important;-webkit-text-fill-color:#1e40af !important;"><font color="#1e40af">Dr. Ardeshir Ekhtiari, DC</font></span></div>
+                </td>
+                <td style="vertical-align:middle;text-align:right;width:240px;padding-left:16px;background-color:#dbeafe">
+                  <span class="pc-email-logo-wrap" style="display:inline-block;background-color:#ffffff;background-image:linear-gradient(#ffffff,#ffffff);border-radius:12px;padding:8px;line-height:0">
+                    <img class="pc-email-logo" src="Logo.png" alt="Posture Clinic logo" width="240" height="96" style="max-height:96px;max-width:240px;width:auto;height:auto;object-fit:contain;display:inline-block;filter:none;-webkit-filter:none;border:0" />
+                  </span>
+                </td>
+              </tr>
+            </table>
+          </div>
+          <div class="pc-email-body" bgcolor="#ffffff" style="border:1px solid #e2e8f0;border-top:0;padding:24px;border-radius:0 0 14px 14px;background-color:#ffffff;background-image:linear-gradient(#ffffff,#ffffff)">
+            <p class="pc-email-text" style="margin:0 0 16px;line-height:1.65;color:#333333;-webkit-text-fill-color:#333333;"><span style="color:#333333 !important;-webkit-text-fill-color:#333333 !important;"><font color="#333333">Dear Patient,</font></span></p>
+            <p class="pc-email-text" style="margin:0 0 16px;line-height:1.65;color:#333333;-webkit-text-fill-color:#333333;"><span style="color:#333333 !important;-webkit-text-fill-color:#333333 !important;"><font color="#333333">Thank you for choosing Posture Clinic. We look forward to providing you with personalized chiropractic care at your upcoming visit.</font></span></p>
+            <p class="pc-email-text" style="margin:0 0 16px;line-height:1.65;color:#333333;-webkit-text-fill-color:#333333;"><span style="color:#333333 !important;-webkit-text-fill-color:#333333 !important;"><font color="#333333">To help us prepare for your appointment, please complete our secure online patient intake form before you arrive. The form collects your health history, current concerns, and consent information so we can serve you efficiently and safely.</font></span></p>
+            <p class="pc-email-text" style="margin:0 0 16px;line-height:1.65;color:#333333;-webkit-text-fill-color:#333333;"><span style="color:#333333 !important;-webkit-text-fill-color:#333333 !important;"><font color="#333333">The process typically takes 10–15 minutes and may be completed on your phone, tablet, or computer. Your responses are transmitted securely and handled in accordance with applicable privacy legislation.</font></span></p>
+            <p style="text-align:center;margin:28px 0 32px">
+              <a class="pc-email-btn" href="https://postureclinicportal.netlify.app/patient-intake.html" style="display:inline-block;background-color:#2563eb;background-image:linear-gradient(#2563eb,#2563eb);color:#ffffff;-webkit-text-fill-color:#ffffff;padding:14px 28px;border-radius:10px;text-decoration:none;font-weight:700;font-size:15px"><span style="color:#ffffff !important;-webkit-text-fill-color:#ffffff !important;"><font color="#ffffff">Complete Patient Intake Form</font></span></a>
+            </p>
+            <p class="pc-email-text" style="margin:0 0 16px;line-height:1.65;color:#333333;-webkit-text-fill-color:#333333;"><span style="color:#333333 !important;-webkit-text-fill-color:#333333 !important;"><font color="#333333">Should you have any questions or require assistance, please contact our office using the details below. We appreciate your time and look forward to welcoming you to the clinic.</font></span></p>
+            <p class="pc-email-text" style="margin:0 0 4px;line-height:1.65;color:#333333;-webkit-text-fill-color:#333333;"><span style="color:#333333 !important;-webkit-text-fill-color:#333333 !important;"><font color="#333333">Warm regards,</font></span></p>
+            <p class="pc-email-signoff" style="margin:0 0 24px;font-weight:600;color:#1e3a8a;-webkit-text-fill-color:#1e3a8a;"><span style="color:#1e3a8a !important;-webkit-text-fill-color:#1e3a8a !important;"><font color="#1e3a8a">Posture Clinic</font></span></p>
+            <div style="border-top:1px solid #e2e8f0;padding-top:16px">
+              <p class="pc-email-contact" style="margin:0;font-size:14px;line-height:1.6;color:#475569;-webkit-text-fill-color:#475569;"><span style="color:#475569 !important;-webkit-text-fill-color:#475569 !important;"><font color="#475569"><strong>Contact our office</strong><br>ardeshir@drekhtiari.com<br>647-835-8118</font></span></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="preview-block">
+      <h2>Non-Chiro Form</h2>
+      <p class="subject"><b>Subject:</b> Complete Your Registration Form — Posture Clinic</p>
+      <div class="email-frame">
+        <div class="email-meta">
+          <div><b>From:</b> Posture Clinic &lt;ardeshir@drekhtiari.com&gt;</div>
+          <div><b>Reply-To:</b> ardeshir@drekhtiari.com</div>
+        </div>
+        <div style="font-family:Segoe UI,Arial,sans-serif;max-width:560px;margin:0 auto;color:#0f172a">
+          <div class="pc-email-header" bgcolor="#dbeafe" style="background-color:#dbeafe;background-image:linear-gradient(#dbeafe,#dbeafe);color:#0f172a;padding:20px 24px;border-radius:14px 14px 0 0;border:1px solid #bfdbfe;border-bottom:0">
+            <table role="presentation" width="100%" cellpadding="0" cellspacing="0" bgcolor="#dbeafe" style="border-collapse:collapse;background-color:#dbeafe;background-image:linear-gradient(#dbeafe,#dbeafe)">
+              <tr>
+                <td style="vertical-align:middle;text-align:left;background-color:#dbeafe">
+                  <div class="pc-clinic-name" style="font-size:22px;font-weight:700;line-height:1.2;color:#1e3a8a;-webkit-text-fill-color:#1e3a8a;"><span style="color:#1e3a8a !important;-webkit-text-fill-color:#1e3a8a !important;"><font color="#1e3a8a">Posture Clinic</font></span></div>
+                  <div class="pc-provider" style="margin-top:6px;color:#1e40af;-webkit-text-fill-color:#1e40af;"><span style="color:#1e40af !important;-webkit-text-fill-color:#1e40af !important;"><font color="#1e40af">Dr. Ardeshir Ekhtiari, DC</font></span></div>
+                </td>
+                <td style="vertical-align:middle;text-align:right;width:240px;padding-left:16px;background-color:#dbeafe">
+                  <span class="pc-email-logo-wrap" style="display:inline-block;background-color:#ffffff;background-image:linear-gradient(#ffffff,#ffffff);border-radius:12px;padding:8px;line-height:0">
+                    <img class="pc-email-logo" src="Logo.png" alt="Posture Clinic logo" width="240" height="96" style="max-height:96px;max-width:240px;width:auto;height:auto;object-fit:contain;display:inline-block;filter:none;-webkit-filter:none;border:0" />
+                  </span>
+                </td>
+              </tr>
+            </table>
+          </div>
+          <div class="pc-email-body" bgcolor="#ffffff" style="border:1px solid #e2e8f0;border-top:0;padding:24px;border-radius:0 0 14px 14px;background-color:#ffffff;background-image:linear-gradient(#ffffff,#ffffff)">
+            <p class="pc-email-text" style="margin:0 0 16px;line-height:1.65;color:#333333;-webkit-text-fill-color:#333333;"><span style="color:#333333 !important;-webkit-text-fill-color:#333333 !important;"><font color="#333333">Dear Patient,</font></span></p>
+            <p class="pc-email-text" style="margin:0 0 16px;line-height:1.65;color:#333333;-webkit-text-fill-color:#333333;"><span style="color:#333333 !important;-webkit-text-fill-color:#333333 !important;"><font color="#333333">Thank you for choosing Posture Clinic. We look forward to welcoming you to our clinic.</font></span></p>
+            <p class="pc-email-text" style="margin:0 0 16px;line-height:1.65;color:#333333;-webkit-text-fill-color:#333333;"><span style="color:#333333 !important;-webkit-text-fill-color:#333333 !important;"><font color="#333333">To help us prepare for your visit, please complete our secure online registration form at your earliest convenience. This allows us to collect your contact details, insurance information, and emergency contact information in advance.</font></span></p>
+            <p class="pc-email-text" style="margin:0 0 16px;line-height:1.65;color:#333333;-webkit-text-fill-color:#333333;"><span style="color:#333333 !important;-webkit-text-fill-color:#333333 !important;"><font color="#333333">The form takes only a few minutes to complete and may be accessed from any smartphone, tablet, or computer. All information is kept confidential and used solely to support your care with us.</font></span></p>
+            <p style="text-align:center;margin:28px 0 32px">
+              <a class="pc-email-btn" href="https://postureclinicportal.netlify.app/patient-intake.html?form=osteopathy" style="display:inline-block;background-color:#2563eb;background-image:linear-gradient(#2563eb,#2563eb);color:#ffffff;-webkit-text-fill-color:#ffffff;padding:14px 28px;border-radius:10px;text-decoration:none;font-weight:700;font-size:15px"><span style="color:#ffffff !important;-webkit-text-fill-color:#ffffff !important;"><font color="#ffffff">Complete Registration Form</font></span></a>
+            </p>
+            <p class="pc-email-text" style="margin:0 0 16px;line-height:1.65;color:#333333;-webkit-text-fill-color:#333333;"><span style="color:#333333 !important;-webkit-text-fill-color:#333333 !important;"><font color="#333333">If you have any questions or need assistance, please do not hesitate to contact our office. We appreciate your cooperation and look forward to seeing you soon.</font></span></p>
+            <p class="pc-email-text" style="margin:0 0 4px;line-height:1.65;color:#333333;-webkit-text-fill-color:#333333;"><span style="color:#333333 !important;-webkit-text-fill-color:#333333 !important;"><font color="#333333">Warm regards,</font></span></p>
+            <p class="pc-email-signoff" style="margin:0 0 24px;font-weight:600;color:#1e3a8a;-webkit-text-fill-color:#1e3a8a;"><span style="color:#1e3a8a !important;-webkit-text-fill-color:#1e3a8a !important;"><font color="#1e3a8a">Posture Clinic</font></span></p>
+            <div style="border-top:1px solid #e2e8f0;padding-top:16px">
+              <p class="pc-email-contact" style="margin:0;font-size:14px;line-height:1.6;color:#475569;-webkit-text-fill-color:#475569;"><span style="color:#475569 !important;-webkit-text-fill-color:#475569 !important;"><font color="#475569"><strong>Contact our office</strong><br>ardeshir@drekhtiari.com<br>647-835-8118</font></span></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+    function setPreviewMode(mode) {
+      document.body.classList.toggle("dark-preview", mode === "dark");
+      document.getElementById("btnLightPreview").classList.toggle("active", mode === "light");
+      document.getElementById("btnDarkPreview").classList.toggle("active", mode === "dark");
+    }
+  </script>
+</body>
+</html>

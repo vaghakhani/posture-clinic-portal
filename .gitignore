@@ -5,3 +5,6 @@ Thumbs.db
 # Never commit patient data
 *.json
 !package.json
+
+# Local Netlify folder
+.netlify

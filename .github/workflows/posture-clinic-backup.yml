@@ -1,0 +1,38 @@
+name: Posture Clinic backups
+
+on:
+  schedule:
+    - cron: "*/10 * * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  backup:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Create dated portal and database backups
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+        run: |
+          if [ -f "netlify-deploy/scripts/github-backup.sh" ]; then
+            bash netlify-deploy/scripts/github-backup.sh
+          elif [ -f "scripts/github-backup.sh" ]; then
+            bash scripts/github-backup.sh
+          else
+            echo "Backup script not found" && exit 1
+          fi
+      - name: Commit backup folders
+        run: |
+          git config user.name "portal-backup"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add backups "Posture Clinic Portal/backups" netlify-deploy/backups || true
+          if git diff --cached --quiet; then
+            echo "No backup files to commit"
+            exit 0
+          fi
+          git commit -m "Clinic backup $(date -u +%Y-%m-%d_%H-%M UTC)"
+          git push
