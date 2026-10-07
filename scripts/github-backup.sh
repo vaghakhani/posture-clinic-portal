@@ -44,27 +44,35 @@ fi
 
 DB_JSON="$DB_DIR/patients-database.json"
 if [ -n "${SUPABASE_URL:-}" ] && [ -n "${SUPABASE_SERVICE_ROLE_KEY:-}" ]; then
-  SNAP=$(curl -fsS "${SUPABASE_URL%/}/rest/v1/clinic_snapshot?id=eq.main&select=data,updated_at" \
-    -H "apikey: $SUPABASE_SERVICE_ROLE_KEY" \
-    -H "Authorization: Bearer $SUPABASE_SERVICE_ROLE_KEY" \
-    -H "Accept: application/json") || SNAP="[]"
-  INTAKE=$(curl -fsS "${SUPABASE_URL%/}/rest/v1/intake_submissions?select=id,status,data,submitted_at,reviewed_at" \
-    -H "apikey: $SUPABASE_SERVICE_ROLE_KEY" \
-    -H "Authorization: Bearer $SUPABASE_SERVICE_ROLE_KEY" \
-    -H "Accept: application/json") || INTAKE="[]"
+  SNAP_FILE="$DB_DIR/clinic_snapshot.raw.json"
+  INTAKE_FILE="$DB_DIR/intake_submissions.raw.json"
 
-  # Build JSON with Python so % and quotes in payloads cannot break printf.
-  "$PY" - "$STAMP" "$DB_JSON" "$SNAP" "$INTAKE" <<'PY'
+  # Write large payloads to files — never pass them as argv (ARG_MAX / "Argument list too long").
+  curl -fsS "${SUPABASE_URL%/}/rest/v1/clinic_snapshot?id=eq.main&select=data,updated_at" \
+    -H "apikey: $SUPABASE_SERVICE_ROLE_KEY" \
+    -H "Authorization: Bearer $SUPABASE_SERVICE_ROLE_KEY" \
+    -H "Accept: application/json" \
+    -o "$SNAP_FILE" || printf '[]\n' > "$SNAP_FILE"
+
+  curl -fsS "${SUPABASE_URL%/}/rest/v1/intake_submissions?select=id,status,data,submitted_at,reviewed_at" \
+    -H "apikey: $SUPABASE_SERVICE_ROLE_KEY" \
+    -H "Authorization: Bearer $SUPABASE_SERVICE_ROLE_KEY" \
+    -H "Accept: application/json" \
+    -o "$INTAKE_FILE" || printf '[]\n' > "$INTAKE_FILE"
+
+  "$PY" - "$STAMP" "$DB_JSON" "$SNAP_FILE" "$INTAKE_FILE" <<'PY'
 import json, sys
-stamp, path, snap_raw, intake_raw = sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4]
-try:
-    snap = json.loads(snap_raw)
-except Exception:
-    snap = []
-try:
-    intake = json.loads(intake_raw)
-except Exception:
-    intake = []
+stamp, path, snap_path, intake_path = sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4]
+
+def load_json(p):
+    try:
+        with open(p, "r", encoding="utf-8") as f:
+            return json.load(f)
+    except Exception:
+        return []
+
+snap = load_json(snap_path)
+intake = load_json(intake_path)
 payload = {
     "stamp": stamp,
     "kind": "database",
@@ -84,7 +92,7 @@ PY
     -H "Content-Type: application/json" \
     -H "Prefer: return=minimal" \
     --data-binary @"$DB_JSON.post.json" >/dev/null || echo "WARN: could not post database row to clinic_backups" >&2
-  rm -f "$DB_JSON.post.json"
+  rm -f "$DB_JSON.post.json" "$SNAP_FILE" "$INTAKE_FILE"
 
   "$PY" - "$STAMP" "$PORTAL_DIR/supabase-row.json" <<'PY'
 import json, sys
